@@ -179,6 +179,8 @@
 enum exynos5_usbdrd_phy_id {
 	EXYNOS5_DRDPHY_UTMI,
 	EXYNOS5_DRDPHY_PIPE3,
+	EXYNOS7870_DRDPHY_UTMI,
+	EXYNOS7870_DRDPHY_PIPE3,
 	EXYNOS5_DRDPHYS_NUM,
 };
 
@@ -300,6 +302,20 @@ static void exynos5_usbdrd_phy_isol(struct phy_usb_instance *inst,
 			   EXYNOS4_PHY_ENABLE, val);
 }
 
+static void exynos7870_usb2drd_phy_isol(struct phy_usb_instance *inst,
+						unsigned int on)
+{
+	unsigned int val;
+
+	if (!inst->reg_pmu)
+		return;
+
+	val = on ? 0 : 2 /*EXYNOS4_PHY_ENABLE*/;
+
+	regmap_update_bits(inst->reg_pmu, inst->pmu_offset,
+			   2 /*EXYNOS4_PHY_ENABLE*/, val);
+}
+
 /*
  * Sets the pipe3 phy's clk as EXTREFCLK (XXTI) which is internal clock
  * from clock core. Further sets multiplier values and spread spectrum
@@ -386,6 +402,28 @@ static void exynos5_usbdrd_pipe3_init(struct exynos5_usbdrd_phy *phy_drd)
 	writel(reg, phy_drd->reg_phy + EXYNOS5_DRD_PHYTEST);
 }
 
+static void exynos7870_usbdrd_pipe3_init(struct exynos5_usbdrd_phy *phy_drd)
+{
+	u32 reg;
+
+	reg = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYPARAM1);
+	/* Set Tx De-Emphasis level */
+	reg &= ~PHYPARAM1_PCS_TXDEEMPH_MASK;
+	reg |=	PHYPARAM1_PCS_TXDEEMPH;
+	writel(reg, phy_drd->reg_phy + EXYNOS5_DRD_PHYPARAM1);
+
+	reg = readl(phy_drd->reg_phy + 0x54);
+	reg &= 0x7fffffbe;
+	writel(reg, phy_drd->reg_phy + 0x54);
+	reg = readl(phy_drd->reg_phy + 0x54);
+	reg |= 1;
+	writel(reg, phy_drd->reg_phy + 0x54);
+	udelay(20);
+	reg = readl(phy_drd->reg_phy + 0x54);
+	reg &= 0xfffffffe;
+	writel(reg, phy_drd->reg_phy + 0x54);
+}
+
 static void exynos5_usbdrd_utmi_init(struct exynos5_usbdrd_phy *phy_drd)
 {
 	u32 reg;
@@ -403,7 +441,10 @@ static void exynos5_usbdrd_utmi_init(struct exynos5_usbdrd_phy *phy_drd)
 	writel(reg, phy_drd->reg_phy + EXYNOS5_DRD_PHYPARAM1);
 
 	/* UTMI Power Control */
-	writel(PHYUTMI_OTGDISABLE, phy_drd->reg_phy + EXYNOS5_DRD_PHYUTMI);
+	if(phy_drd->drv_data->phy_cfg->id == EXYNOS7870_DRDPHY_UTMI)
+		writel(0x660, phy_drd->reg_phy + EXYNOS5_DRD_PHYUTMI);
+	else
+		writel(PHYUTMI_OTGDISABLE, phy_drd->reg_phy + EXYNOS5_DRD_PHYUTMI);
 
 	reg = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYTEST);
 	reg &= ~PHYTEST_POWERDOWN_HSP;
@@ -429,8 +470,12 @@ static int exynos5_usbdrd_phy_init(struct phy *phy)
 	 * Setting the Frame length Adj value[6:1] to default 0x20
 	 * See xHCI 1.0 spec, 5.2.4
 	 */
-	reg =	LINKSYSTEM_XHCI_VERSION_CONTROL |
-		LINKSYSTEM_FLADJ(0x20);
+	if (phy_drd->drv_data->phy_cfg->id == EXYNOS7870_DRDPHY_UTMI ||
+	    phy_drd->drv_data->phy_cfg->id == EXYNOS7870_DRDPHY_PIPE3)
+		reg = 0x8000180;
+	else
+		reg =	LINKSYSTEM_XHCI_VERSION_CONTROL |
+			LINKSYSTEM_FLADJ(0x20);
 	writel(reg, phy_drd->reg_phy + EXYNOS5_DRD_LINKSYSTEM);
 
 	reg = readl(phy_drd->reg_phy + EXYNOS5_DRD_PHYPARAM0);
@@ -933,6 +978,21 @@ static const struct exynos5_usbdrd_phy_config phy_cfg_exynos5[] = {
 	},
 };
 
+static const struct exynos5_usbdrd_phy_config phy_cfg_exynos7870[] = {
+	{
+		.id		= EXYNOS7870_DRDPHY_UTMI,
+		.phy_isol	= exynos7870_usb2drd_phy_isol,
+		.phy_init	= exynos5_usbdrd_utmi_init,
+		.set_refclk	= exynos5_usbdrd_utmi_set_refclk,
+	},
+	{
+		.id		= EXYNOS7870_DRDPHY_PIPE3,
+		.phy_isol	= exynos5_usbdrd_phy_isol,
+		.phy_init	= exynos7870_usbdrd_pipe3_init,
+		.set_refclk	= exynos5_usbdrd_pipe3_set_refclk,
+	},
+};
+
 static const struct exynos5_usbdrd_phy_config phy_cfg_exynos850[] = {
 	{
 		.id		= EXYNOS5_DRDPHY_UTMI,
@@ -971,6 +1031,13 @@ static const struct exynos5_usbdrd_phy_drvdata exynos7_usbdrd_phy = {
 	.has_common_clk_gate	= false,
 };
 
+static const struct exynos5_usbdrd_phy_drvdata exynos7870_usbdrd_phy = {
+	.phy_cfg		= phy_cfg_exynos7870,
+	.phy_ops		= &exynos5_usbdrd_phy_ops,
+	.pmu_offset_usbdrd0_phy	= EXYNOS5_USBDRD_PHY_CONTROL,
+	.has_common_clk_gate	= false,
+};
+
 static const struct exynos5_usbdrd_phy_drvdata exynos850_usbdrd_phy = {
 	.phy_cfg		= phy_cfg_exynos850,
 	.phy_ops		= &exynos850_usbdrd_phy_ops,
@@ -991,6 +1058,9 @@ static const struct of_device_id exynos5_usbdrd_phy_of_match[] = {
 	}, {
 		.compatible = "samsung,exynos7-usbdrd-phy",
 		.data = &exynos7_usbdrd_phy
+	}, {
+		.compatible = "samsung,exynos7870-usbdrd-phy",
+		.data = &exynos7870_usbdrd_phy
 	}, {
 		.compatible = "samsung,exynos850-usbdrd-phy",
 		.data = &exynos850_usbdrd_phy
