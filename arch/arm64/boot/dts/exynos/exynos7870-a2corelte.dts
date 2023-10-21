@@ -145,7 +145,7 @@
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	accel-irq {
+	accel_irq: accel-irq {
 		samsung,pins = "gpa2-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
@@ -188,6 +188,30 @@
 	pm_wrsti: pm-wrsti {
 		samsung,pins = "gpd1-0";
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+	};
+};
+
+&i2c1 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	samsung,i2c-max-bus-freq = <400000>;
+	samsung,i2c-sda-delay = <100>;
+
+	accelerometer@1d {
+		compatible = "st,lis2ds12";
+		reg = <0x1d>;
+		interrupt-parent = <&gpa2>;
+		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&accel_irq>;
+
+		vdd-supply = <&vdd_ldo33>;
+		vddio-supply = <&vdd_ldo33>;
+
+		st,drdy-int-pin = <1>;
 	};
 };
 
@@ -478,9 +502,6 @@
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 				regulator-ramp-delay = <12000>;
-
-				regulator-always-on;
-				regulator-boot-on;
 			};
 
 			vdd_ldo34: LDO34 {
