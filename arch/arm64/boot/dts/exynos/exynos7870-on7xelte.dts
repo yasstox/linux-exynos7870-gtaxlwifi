@@ -191,7 +191,7 @@
 		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
 	};
 
-	acc-int {
+	accel_irq: accel-irq {
 		samsung,pins = "gpa2-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
@@ -381,6 +381,34 @@
 	};
 };
 
+&i2c5 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	samsung,i2c-max-bus-freq = <400000>;
+	samsung,i2c-sda-delay = <100>;
+
+	accelerometer@1d {
+		compatible = "st,lis2hh12";
+		reg = <0x1d>;
+		interrupt-parent = <&gpa2>;
+		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&accel_irq>;
+
+		vdd-supply = <&vdd_ldo3>;
+		vddio-supply = <&vdd_ldo3>;
+
+		mount-matrix = "1",  "0",  "0",
+			       "0", "-1",  "0",
+			       "0",  "0", "-1";
+
+		st,drdy-int-pin = <1>;
+	};
+};
+
 &i2c7 {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -396,6 +424,20 @@
 		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
 
 		mip4_ts,keycode = <KEY_CYCLEWINDOWS KEY_BACK>;
+	};
+};
+
+&i2c8 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	samsung,i2c-max-bus-freq = <400000>;
+	samsung,i2c-sda-delay = <100>;
+
+	panel@29 {
+		compatible = "renesas,isl98611";
+		reg = <0x29>;
 	};
 };
 
@@ -494,8 +536,6 @@
 				regulator-min-microvolt = <800000>;
 				regulator-max-microvolt = <2375000>;
 				regulator-ramp-delay = <12000>;
-
-				regulator-always-on;
 				regulator-boot-on;
 			};
 
