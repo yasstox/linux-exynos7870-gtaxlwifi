@@ -178,7 +178,7 @@
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
 	};
 
-	prox-int {
+	proxm_irq: proxm-irq {
 		samsung,pins = "gpa0-5";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
@@ -409,6 +409,27 @@
 	};
 };
 
+&i2c6 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	samsung,i2c-max-bus-freq = <400000>;
+	samsung,i2c-sda-delay = <100>;
+
+	proximity@48 {
+		compatible = "sensortek,stk3013";
+		reg = <0x48>;
+		interrupt-parent = <&gpa0>;
+		interrupts = <5 IRQ_TYPE_EDGE_BOTH>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&proxm_irq>;
+
+		proximity-near-level = <25>;
+	};
+};
+
 &i2c7 {
 	#address-cells = <1>;
 	#size-cells = <0>;
@@ -536,6 +557,7 @@
 				regulator-min-microvolt = <800000>;
 				regulator-max-microvolt = <2375000>;
 				regulator-ramp-delay = <12000>;
+				regulator-always-on;
 				regulator-boot-on;
 			};
 
@@ -670,6 +692,8 @@
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-ramp-delay = <12000>;
+				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo34: LDO34 {
