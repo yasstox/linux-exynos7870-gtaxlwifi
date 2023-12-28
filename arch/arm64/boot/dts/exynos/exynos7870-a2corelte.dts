@@ -85,6 +85,16 @@
 		enable-active-high;
 	};
 
+	vdd_dummy_proxled: dummyregulator-proxled {
+		compatible = "regulator-fixed";
+		regulator-name = "vdd_dummy_proxled";
+		regulator-boot-on;
+		regulator-always-on;
+		
+		gpio = <&gpd4 3 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+	};
+
 	vdd_dummy_touch: dummyregulator-touch {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_dummy_touch";
@@ -152,29 +162,11 @@
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	proxm-irq {
+	proxm_irq: proxm-irq {
 		samsung,pins = "gpa0-5";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
-	};
-
-	cfg-wlanhostwake {
-		samsung,pins = "gpa2-2";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
-	};
-
-	if-irq {
-		samsung,pins = "gpa2-7";
-		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
-	};
-
-	cod3026-irq {
-		samsung,pins = "gpa0-4";
-		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
 	};
 
 	wlan_enable: wlan-enable {
@@ -212,6 +204,18 @@
 		vddio-supply = <&vdd_ldo33>;
 
 		st,drdy-int-pin = <1>;
+	};
+
+	proximity@48 {
+		compatible = "sensortek,stk3013";
+		reg = <0x48>;
+		interrupt-parent = <&gpa0>;
+		interrupts = <5 IRQ_TYPE_EDGE_BOTH>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&proxm_irq>;
+
+		proximity-near-level = <25>;
 	};
 };
 
@@ -367,9 +371,8 @@
 				regulator-min-microvolt = <800000>;
 				regulator-max-microvolt = <2375000>;
 				regulator-ramp-delay = <12000>;
-
-				regulator-always-on;
 				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo4: LDO4 {
@@ -439,6 +442,7 @@
 				regulator-ramp-delay = <12000>;
 
 				regulator-always-on;
+				regulator-boot-on;
 			};
 
 			vdd_ldo25: LDO25 {
@@ -466,9 +470,8 @@
 				regulator-name = "vdd_ldo29";
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
-
-				regulator-always-on;
 				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo30: LDO30 {
