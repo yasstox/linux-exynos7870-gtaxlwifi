@@ -76,7 +76,7 @@
 	};
 
 	uart2-bus {
-		samsung,pins = "gpa1-1","gpa1-0";
+		samsung,pins = "gpa1-1", "gpa1-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 	};
@@ -110,7 +110,7 @@
 	};
 
 	gnss-sensor-i2c {
-		samsung,pins = "gpa2-5","gpa2-4";
+		samsung,pins = "gpa2-5", "gpa2-4";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_6>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 	};
@@ -302,14 +302,14 @@
 	};
 
 	sd0-bus-width4 {
-		samsung,pins = "gpr1-1","gpr1-2", "gpr1-3";
+		samsung,pins = "gpr1-1", "gpr1-2", "gpr1-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR3>;
 	};
 
 	sd0-bus-width8 {
-		samsung,pins = "gpr1-4","gpr1-5", "gpr1-6", "gpr1-7";
+		samsung,pins = "gpr1-4", "gpr1-5", "gpr1-6", "gpr1-7";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR3>;
@@ -381,7 +381,7 @@
 	};
 
 	sd1_bus4: sd1-bus-width4 {
-		samsung,pins = "gpr3-1","gpr3-2", "gpr3-3";
+		samsung,pins = "gpr3-1", "gpr3-2", "gpr3-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_INPUT>;
 		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_UP>;
@@ -411,7 +411,7 @@
 	};
 
 	sd2_bus4: sd2-bus-width4 {
-		samsung,pins = "gpr4-3","gpr4-4", "gpr4-5";
+		samsung,pins = "gpr4-3", "gpr4-4", "gpr4-5";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR3>;
@@ -456,7 +456,7 @@
 	};
 
 	hs-i2c0-bus {
-		samsung,pins = "gpm0-1","gpm0-0";
+		samsung,pins = "gpm0-1", "gpm0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
@@ -474,7 +474,7 @@
 	};
 
 	i2c2_bus: i2c2-bus {
-		samsung,pins = "gpc2-1","gpc2-0";
+		samsung,pins = "gpc2-1", "gpc2-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -651,13 +651,13 @@
 
 	uart0-bus {
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pins = "gpb0-3","gpb0-2", "gpb0-1", "gpb0-0";
+		samsung,pins = "gpb0-3", "gpb0-2", "gpb0-1", "gpb0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 	};
 
 	uart1-bus {
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pins = "gpd2-3","gpd2-2", "gpd2-1", "gpd2-0";
+		samsung,pins = "gpd2-3", "gpd2-2", "gpd2-1", "gpd2-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 	};
 
@@ -672,49 +672,49 @@
 	};
 
 	hs-i2c1-bus {
-		samsung,pins = "gpf3-0","gpf3-1";
+		samsung,pins = "gpf3-0", "gpf3-1";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	hs-i2c2-bus {
-		samsung,pins = "gpf3-2","gpf3-3";
+		samsung,pins = "gpf3-2", "gpf3-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	hs-i2c3-bus {
-		samsung,pins = "gpf0-1","gpf0-0";
+		samsung,pins = "gpf0-1", "gpf0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	hs-i2c4-bus {
-		samsung,pins = "gpf1-1","gpf1-0";
+		samsung,pins = "gpf1-1", "gpf1-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	hs-i2c5-bus {
-		samsung,pins = "gpf0-3","gpf0-2";
+		samsung,pins = "gpf0-3", "gpf0-2";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	hs-i2c6-bus {
-		samsung,pins = "gpf2-1","gpf2-0";
+		samsung,pins = "gpf2-1", "gpf2-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c0_bus: i2c0-bus {
-		samsung,pins = "gpc1-1","gpc1-0";
+		samsung,pins = "gpc1-1", "gpc1-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
 		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_UP>;
@@ -723,56 +723,56 @@
 	};
 
 	i2c1_bus: i2c1-bus {
-		samsung,pins = "gpc1-3","gpc1-2";
+		samsung,pins = "gpc1-3", "gpc1-2";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c4_bus: i2c4-bus {
-		samsung,pins = "gpc4-1","gpc4-0";
+		samsung,pins = "gpc4-1", "gpc4-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c5_bus: i2c5-bus {
-		samsung,pins = "gpc4-3","gpc4-2";
+		samsung,pins = "gpc4-3", "gpc4-2";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c6_bus: i2c6-bus {
-		samsung,pins = "gpc5-1","gpc5-0";
+		samsung,pins = "gpc5-1", "gpc5-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c7_bus: i2c7-bus {
-		samsung,pins = "gpc8-1","gpc8-0";
+		samsung,pins = "gpc8-1", "gpc8-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	i2c8_bus: i2c8-bus {
-		samsung,pins = "gpc9-1","gpc9-0";
+		samsung,pins = "gpc9-1", "gpc9-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	spi0-bus {
-		samsung,pins = "gpc6-0","gpc6-2", "gpc6-3";
+		samsung,pins = "gpc6-0", "gpc6-2", "gpc6-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
 	spi0-bus-suspend {
-		samsung,pins = "gpc6-0","gpc6-2", "gpc6-3";
+		samsung,pins = "gpc6-0", "gpc6-2", "gpc6-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -786,7 +786,7 @@
 	};
 
 	spi2-bus {
-		samsung,pins = "gpc4-2","gpc5-0", "gpc5-1";
+		samsung,pins = "gpc4-2", "gpc5-0", "gpc5-1";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -807,7 +807,7 @@
 	};
 
 	spi3-bus {
-		samsung,pins = "gpf3-3","gpf3-2", "gpf3-0";
+		samsung,pins = "gpf3-3", "gpf3-2", "gpf3-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -828,7 +828,7 @@
 	};
 
 	spi4-bus {
-		samsung,pins = "gpf4-3","gpf4-2", "gpf4-0";
+		samsung,pins = "gpf4-3", "gpf4-2", "gpf4-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -920,7 +920,7 @@
 	};
 
 	fimc-is-flash {
-		samsung,pins = "gpd3-2","gpd3-3";
+		samsung,pins = "gpd3-2", "gpd3-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -956,7 +956,7 @@
 	};
 
 	spi2-mosi-sck-ssn {
-		samsung,pins = "gpc5-1","gpc4-2", "gpc4-3";
+		samsung,pins = "gpc5-1", "gpc4-2", "gpc4-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
@@ -971,7 +971,7 @@
 	};
 
 	hs-i2c2-2-bus {
-		samsung,pins = "gpf4-2","gpf4-3";
+		samsung,pins = "gpf4-2", "gpf4-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_3>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
@@ -988,7 +988,7 @@
 	};
 
 	i2c3_bus: i2c3-bus {
-		samsung,pins = "gpc3-1","gpc3-0";
+		samsung,pins = "gpc3-1", "gpc3-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
