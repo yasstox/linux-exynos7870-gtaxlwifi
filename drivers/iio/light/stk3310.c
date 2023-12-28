@@ -35,6 +35,7 @@
 #define STK3310_STATE_EN_ALS			BIT(1)
 #define STK3310_STATE_STANDBY			0x00
 
+#define STK3013_CHIP_ID_VAL			0x31
 #define STK3310_CHIP_ID_VAL			0x13
 #define STK3311_CHIP_ID_VAL			0x1D
 #define STK3311X_CHIP_ID_VAL			0x12
@@ -473,7 +474,8 @@ static int stk3310_init(struct iio_dev *indio_dev)
 	if (ret < 0)
 		return ret;
 
-	if (chipid != STK3310_CHIP_ID_VAL &&
+	if (chipid != STK3013_CHIP_ID_VAL &&
+	    chipid != STK3310_CHIP_ID_VAL &&
 	    chipid != STK3311_CHIP_ID_VAL &&
 	    chipid != STK3311X_CHIP_ID_VAL &&
 	    chipid != STK3335_CHIP_ID_VAL) {
@@ -683,6 +685,7 @@ static DEFINE_SIMPLE_DEV_PM_OPS(stk3310_pm_ops, stk3310_suspend,
 				stk3310_resume);
 
 static const struct i2c_device_id stk3310_i2c_id[] = {
+	{"STK3013", 0},
 	{"STK3310", 0},
 	{"STK3311", 0},
 	{"STK3335", 0},
@@ -691,6 +694,7 @@ static const struct i2c_device_id stk3310_i2c_id[] = {
 MODULE_DEVICE_TABLE(i2c, stk3310_i2c_id);
 
 static const struct acpi_device_id stk3310_acpi_id[] = {
+	{"STK3013", 0},
 	{"STK3310", 0},
 	{"STK3311", 0},
 	{"STK3335", 0},
@@ -700,6 +704,7 @@ static const struct acpi_device_id stk3310_acpi_id[] = {
 MODULE_DEVICE_TABLE(acpi, stk3310_acpi_id);
 
 static const struct of_device_id stk3310_of_match[] = {
+	{ .compatible = "sensortek,stk3013", },
 	{ .compatible = "sensortek,stk3310", },
 	{ .compatible = "sensortek,stk3311", },
 	{ .compatible = "sensortek,stk3335", },
