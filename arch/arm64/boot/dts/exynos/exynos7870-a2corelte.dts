@@ -2,7 +2,7 @@
 /*
  * Samsung Galaxy A2 Core (a2corelte) device tree source
  *
- * Copyright (c) ???
+ * Copyright (c) 2018 Samsung Electronics Co., Ltd.
  */
 
 /dts-v1/;
@@ -22,22 +22,23 @@
 	reserved-memory {
 		#address-cells = <2>;
 		#size-cells = <1>;
+
 		ranges;
 
 		bootloaderfb@67000000 {
-			reg = <0 0x67000000 0x1fb000>;
+			reg = <0x0 0x67000000 0x1fb000>;
 			no-map;
 		};
 	};
 
 	memory@40000000 {
 		device_type = "memory";
-		reg = <0x00 0x40000000 0x3f200000>;
+		reg = <0x0 0x40000000 0x3f200000>;
 	};
 
 	bootloaderfb@67000000 {
 		compatible = "simple-framebuffer";
-		reg = <0 0x67000000 (540*960*4)>;
+		reg = <0x0 0x67000000 (540*960*4)>;
 		width = <540>;
 		height = <960>;
 		stride = <(540*4)>;
@@ -46,6 +47,7 @@
 
 	gpio-keys {
 		compatible = "gpio-keys";
+
 		pinctrl-names = "default";
 		pinctrl-0 = <&key_power &key_volup &key_voldown>;
 
@@ -90,7 +92,7 @@
 		regulator-name = "vdd_dummy_proxled";
 		regulator-boot-on;
 		regulator-always-on;
-		
+
 		gpio = <&gpd4 3 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
 	};
@@ -99,101 +101,88 @@
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_dummy_touch";
 	};
-
-	vdd_dummy_mmc1: dummyregulator-mmc1 {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_dummy_mmc1";
-	};
 };
 
 &pinctrl0 {
-	key_power: key-power {
+	key_power: key-power-pins {
 		samsung,pins = "gpa0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	key_volup: key-volup {
+	key_volup: key-volup-pins {
 		samsung,pins = "gpa2-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	key_voldown: key-voldown {
+	key_voldown: key-voldown-pins {
 		samsung,pins = "gpa2-1";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	dwmmc2_irq: dwmmc2-irq {
+	dwmmc2_irq: dwmmc2-irq-pins {
 		samsung,pins = "gpa0-1";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	pmic_irq: pmic-irq {
+	pmic_irq: pmic-irq-pins {
 		samsung,pins = "gpa0-2";
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
 	};
 
-	fuel_irq: fuel-irq {
+	fuel_irq: fuel-irq-pins {
 		samsung,pins = "gpa0-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	touch_irq: touch-irq {
+	touch_irq: touch-irq-pins {
 		samsung,pins = "gpa0-6";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	accel_irq: accel-irq {
+	accel_irq: accel-irq-pins {
 		samsung,pins = "gpa2-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 
-	proxm_irq: proxm-irq {
+	proxm_irq: proxm-irq-pins {
 		samsung,pins = "gpa0-5";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
-
-	wlan_enable: wlan-enable {
-		samsung,pins = "gpa2-2";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
-	};
 };
 
 &pinctrl6 {
-	pm_wrsti: pm-wrsti {
+	pm_wrsti: pm-wrsti-pins {
 		samsung,pins = "gpd1-0";
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
 	};
 };
 
 &i2c1 {
+	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
-	status = "okay";
-
-	samsung,i2c-max-bus-freq = <400000>;
-	samsung,i2c-sda-delay = <100>;
 
 	accelerometer@1d {
 		compatible = "st,lis2ds12";
 		reg = <0x1d>;
+
 		interrupt-parent = <&gpa2>;
 		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
 
@@ -209,6 +198,7 @@
 	proximity@48 {
 		compatible = "sensortek,stk3013";
 		reg = <0x48>;
+
 		interrupt-parent = <&gpa0>;
 		interrupts = <5 IRQ_TYPE_EDGE_BOTH>;
 
@@ -220,18 +210,16 @@
 };
 
 &i2c2 {
+	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
-	status = "okay";
-
-	samsung,i2c-max-bus-freq = <400000>;
-	samsung,i2c-sda-delay = <100>;
 
 	touchscreen@4b {
 		compatible = "syna,rmi4-i2c";
+		reg = <0x4b>;
 		#address-cells = <1>;
 		#size-cells = <0>;
-		reg = <0x4b>;
+
 		interrupt-parent = <&gpa0>;
 		interrupts = <6 IRQ_TYPE_LEVEL_LOW>;
 
@@ -258,16 +246,14 @@
 };
 
 &i2c4 {
+	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
-	status = "okay";
-
-	samsung,i2c-max-bus-freq = <400000>;
-	samsung,i2c-sda-delay = <100>;
 
 	fuelgauge@3b {
 		compatible = "samsung,s2mu005-fg";
 		reg = <0x3b>;
+
 		interrupt-parent = <&gpa0>;
 		interrupts = <3 IRQ_TYPE_EDGE_BOTH>;
 
@@ -277,17 +263,14 @@
 };
 
 &hsi2c0 {
+	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
-	status = "okay";
 
-	sda-gpios = <&gpm0 0 GPIO_ACTIVE_HIGH>;
-	scl-gpios = <&gpm0 1 GPIO_ACTIVE_HIGH>;
-	i2c-gpio,delay-us = <2>;
-
-	s2mpu05-pmic@66 {
+	pmic@66 {
 		compatible = "samsung,s2mpu05-pmic";
 		reg = <0x66>;
+
 		interrupt-parent = <&gpa0>;
 		interrupts = <2 IRQ_TYPE_LEVEL_LOW>;
 
@@ -534,7 +517,6 @@
 
 &dwmmc0 {
 	status = "okay";
-	non-removable;
 
 	vmmc-supply = <&vdd_ldo26>;
 	vqmmc-supply = <&vdd_ldo27>;
@@ -543,36 +525,11 @@
 	samsung,dw-mshc-ciu-div = <3>;
 	samsung,dw-mshc-sdr-timing = <0 4>;
 	samsung,dw-mshc-ddr-timing = <2 4>;
-};
-
-&dwmmc1 {
-	status = "okay";
 	non-removable;
-	fifo-access-32bit;
-	sd-uhs-sdr50;
-	sd-uhs-sdr104;
-	cap-sdio-irq;
-	cap-sd-highspeed;
-
-	pinctrl-names = "default";
-	pinctrl-0 = <&sd1_clk &sd1_cmd &sd1_bus1 &sd1_bus4>;
-
-	vmmc-supply = <&wlan_enable>;
-	vqmmc-supply = <&vdd_dummy_mmc1>;
-
-	bus-width = <4>;
-	fifo-depth = <64>;
-	samsung,dw-mshc-ciu-div = <3>;
-	samsung,dw-mshc-sdr-timing = <0 3>;
-	samsung,dw-mshc-ddr-timing = <1 2>;
-	samsung,dw-mshc-sdr50-timing = <2 4>;
-	samsung,dw-mshc-sdr104-timing = <0 3>;
 };
 
 &dwmmc2 {
 	status = "okay";
-	non-removable;
-	disable-wp;
 
 	pinctrl-names = "default";
 	pinctrl-0 = <&sd2_clk &sd2_cmd &sd2_bus1 &sd2_bus4 &dwmmc2_irq>;
@@ -585,6 +542,8 @@
 	samsung,dw-mshc-ciu-div = <3>;
 	samsung,dw-mshc-sdr-timing = <0 3>;
 	samsung,dw-mshc-ddr-timing = <1 2>;
+	non-removable;
+	disable-wp;
 };
 
 &usbdrd {
