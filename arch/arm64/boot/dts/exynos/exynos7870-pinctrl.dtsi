@@ -651,13 +651,13 @@
 
 	uart0_bus: uart0-bus-pins {
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pins = "gpb0-3","gpb0-2", "gpb0-1", "gpb0-0";
+		samsung,pins = "gpb0-3", "gpb0-2", "gpb0-1", "gpb0-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 	};
 
 	uart1_bus: uart1-bus-pins {
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pins = "gpd2-3","gpd2-2", "gpd2-1", "gpd2-0";
+		samsung,pins = "gpd2-3", "gpd2-2", "gpd2-1", "gpd2-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 	};
 
@@ -919,27 +919,6 @@
 		samsung,pin-val = <0>;
 	};
 
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR2>;
-	};
-
-	fimc-is-mclk1-in {
-		samsung,pins = "gpe0-1";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
-	};
-
-	fimc-is-mclk2-fn {
-		samsung,pins = "gpf4-4";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR3>;
-	};
-
-	fimc-is-flash {
-		samsung,pins = "gpd3-2","gpd3-3";
-=======
 	fimc_is_flash: fimc-is-flash-pins {
 		samsung,pins = "gpd3-2", "gpd3-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
@@ -1009,7 +988,7 @@
 	};
 
 	i2c3_bus: i2c3-bus-pins {
-		samsung,pins = "gpc3-1","gpc3-0";
+		samsung,pins = "gpc3-1", "gpc3-0";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_2>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
