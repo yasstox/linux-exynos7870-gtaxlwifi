@@ -7,6 +7,7 @@
 
 #include <dt-bindings/clock/exynos7870.h>
 #include <dt-bindings/interrupt-controller/arm-gic.h>
+#include <dt-bindings/soc/samsung,boot-mode.h>
 
 / {
 	compatible = "samsung,exynos7870";
@@ -165,9 +166,18 @@
 		};
 
 		pmu_system_controller: system-controller@10480000 {
-			compatible = "samsung,exynos7870-pmu",
-				     "samsung,exynos7-pmu", "syscon";
+			compatible = "samsung,exynos7-pmu", "syscon";
 			reg = <0x10480000 0x10000>;
+
+			syscon-reboot-mode {
+				compatible = "syscon-reboot-mode";
+				regmap = <&pmu_system_controller>;
+				offset = <0x080c>;
+
+				mode-bootloader = <EXYNOS7870_BOOT_BOOTLOADER>;
+				mode-download = <EXYNOS7870_BOOT_DOWNLOAD>;
+				mode-recovery = <EXYNOS7870_BOOT_RECOVERY>;
+			};
 		};
 
 		gic: interrupt-controller@104e0000 {
