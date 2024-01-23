@@ -41,12 +41,8 @@
 
 	memory@40000000 {
 		device_type = "memory";
-		reg = <0x0 0x40000000 0x3e400000>;
-	};
-
-	memory@80000000 {
-		device_type = "memory";
-		reg = <0x0 0x80000000 0x80000000>;
+		reg = <0x0 0x40000000 0x3e400000>,
+		      <0x0 0x80000000 0x80000000>;
 	};
 
 	bootloaderfb@67000000 {
@@ -300,11 +296,16 @@
 	#size-cells = <0>;
 
 	touchkey@49 {
-		compatible = "melfas,mip4_ts";
+		compatible = "melfas,mip4_touchkey";
 		reg = <0x49>;
 
 		interrupt-parent = <&gpa1>;
-		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
+		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&tkey_irq>;
+
+		vdd-supply = <&vdd_ldo34>;
 
 		linux,keycodes = <KEY_MENU KEY_BACK>;
 	};
@@ -528,8 +529,6 @@
 				regulator-min-microvolt = <3000000>;
 				regulator-max-microvolt = <3000000>;
 				regulator-ramp-delay = <12000>;
-				regulator-boot-on;
-				regulator-always-on;
 			};
 
 			vdd_ldo35: LDO35 {
