@@ -197,24 +197,28 @@
 		clkio_dispaud_audiocdclk0: clkio_dispaud_audiocdclk0 {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
+
 			clock-frequency = <100000000>;
 		};
 
 		clkio_dispaud_mixer_bclk_bt: clkio_dispaud_mixer_bclk_bt {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
+
 			clock-frequency = <12500000>;
 		};
 
 		clkio_dispaud_mixer_bclk_cp: clkio_dispaud_mixer_bclk_cp {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
+
 			clock-frequency = <12500000>;
 		};
 
 		clkio_dispaud_mixer_bclk_fm: clkio_dispaud_mixer_bclk_fm {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
+
 			clock-frequency = <12500000>;
 		};
 
@@ -715,7 +719,7 @@
 		uart0: uart@13810000 {
 			compatible = "samsung,exynos850-uart";
 			reg = <0x13810000 0x100>;
-			status = "okay";
+			status = "disabled";
 
 			interrupts = <GIC_SPI 422 IRQ_TYPE_LEVEL_HIGH>;
 
@@ -732,7 +736,7 @@
 		uart1: uart@13800000 {
 			compatible = "samsung,exynos850-uart";
 			reg = <0x13800000 0x100>;
-			status = "okay";
+			status = "disabled";
 
 			interrupts = <GIC_SPI 421 IRQ_TYPE_LEVEL_HIGH>;
 
@@ -749,7 +753,7 @@
 		uart2: uart@13820000 {
 			compatible = "samsung,exynos850-uart";
 			reg = <0x13820000 0x100>;
-			status = "okay";
+			status = "disabled";
 
 			interrupts = <GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>;
 
