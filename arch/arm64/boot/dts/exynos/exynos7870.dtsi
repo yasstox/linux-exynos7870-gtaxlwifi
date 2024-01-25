@@ -154,6 +154,20 @@
 					  IRQ_TYPE_LEVEL_LOW)>;
 	};
 
+	gic: interrupt-controller@104e0000 {
+		compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
+		#interrupt-cells = <3>;
+		#address-cells = <0>;
+		interrupt-controller;
+
+		reg = <0x0 0x104e1000 0x1000>,
+		      <0x0 0x104e2000 0x1000>,
+		      <0x0 0x104e4000 0x2000>,
+		      <0x0 0x104e6000 0x2000>;
+		interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) |
+					 IRQ_TYPE_LEVEL_HIGH)>;
+	};
+
 	soc: soc@0 {
 		compatible = "simple-bus";
 		#address-cells = <1>;
@@ -178,20 +192,6 @@
 				mode-download = <EXYNOS7870_BOOT_DOWNLOAD>;
 				mode-recovery = <EXYNOS7870_BOOT_RECOVERY>;
 			};
-		};
-
-		gic: interrupt-controller@104e0000 {
-			compatible = "arm,cortex-a15-gic", "arm,cortex-a9-gic";
-			#interrupt-cells = <3>;
-			#address-cells = <0>;
-			interrupt-controller;
-
-			reg = <0x104e1000 0x1000>,
-			      <0x104e2000 0x1000>,
-			      <0x104e4000 0x2000>,
-			      <0x104e6000 0x2000>;
-			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(8) |
-						 IRQ_TYPE_LEVEL_HIGH)>;
 		};
 
 		clkio_dispaud_audiocdclk0: clkio_dispaud_audiocdclk0 {
