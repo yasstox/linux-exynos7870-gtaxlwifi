@@ -96,7 +96,7 @@
 		max-microvolt = <3300000>;
 	};
 
-	vdd_fixed_mmc2: fixedregulator-mmc2 {
+	vdd_fixed_mmc2: regulator-fixed-mmc2 {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_fixed_mmc2";
 		regulator-max-microvolt = <2800000>;
@@ -104,11 +104,6 @@
 
 		gpio = <&gpc0 0 GPIO_ACTIVE_HIGH>;
 		enable-active-high;
-	};
-
-	vdd_dummy_touch: dummyregulator-touch {
-		compatible = "regulator-fixed";
-		regulator-name = "vdd_dummy_touch";
 	};
 };
 
@@ -223,9 +218,6 @@
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&touch_irq>;
-
-		vdd-supply = <&vdd_dummy_touch>;
-		vio-supply = <&vdd_ldo29>;
 
 		syna,reset-delay-ms = <200>;
 		syna,startup-delay-ms = <200>;
@@ -470,6 +462,7 @@
 				regulator-min-microvolt = <650000>;
 				regulator-max-microvolt = <1350000>;
 				regulator-ramp-delay = <12000>;
+				regulator-boot-on;
 				regulator-always-on;
 			};
 
@@ -478,6 +471,8 @@
 				regulator-min-microvolt = <800000>;
 				regulator-max-microvolt = <2375000>;
 				regulator-ramp-delay = <12000>;
+				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo26: LDO26 {
@@ -502,6 +497,8 @@
 				regulator-name = "vdd_ldo28";
 				regulator-min-microvolt = <2800000>;
 				regulator-max-microvolt = <2800000>;
+				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo29: LDO29 {
@@ -509,6 +506,8 @@
 				regulator-min-microvolt = <1800000>;
 				regulator-max-microvolt = <1800000>;
 				regulator-ramp-delay = <12000>;
+				regulator-boot-on;
+				regulator-always-on;
 			};
 
 			vdd_ldo31: LDO31 {
@@ -547,6 +546,8 @@
 				regulator-name = "vdd_ldo35";
 				regulator-min-microvolt = <2800000>;
 				regulator-max-microvolt = <2800000>;
+				regulator-boot-on;
+				regulator-always-on;
 			};
 		};
 	};
