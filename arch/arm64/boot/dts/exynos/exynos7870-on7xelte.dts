@@ -207,6 +207,9 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
+	samsung,i2c-sda-delay = <100>;
+	samsung,i2c-max-bus-freq = <400000>;
+
 	touchscreen@70 {
 		compatible = "syna,rmi4-i2c";
 		reg = <0x70>;
@@ -240,6 +243,9 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
+	samsung,i2c-sda-delay = <100>;
+	samsung,i2c-max-bus-freq = <400000>;
+
 	fuelgauge@3b {
 		compatible = "samsung,s2mu005-fg";
 		reg = <0x3b>;
@@ -256,6 +262,9 @@
 	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
+
+	samsung,i2c-sda-delay = <100>;
+	samsung,i2c-max-bus-freq = <400000>;
 
 	accelerometer@1d {
 		compatible = "st,lis2hh12";
@@ -280,6 +289,9 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
+	samsung,i2c-sda-delay = <100>;
+	samsung,i2c-max-bus-freq = <400000>;
+
 	proximity@48 {
 		compatible = "sensortek,stk3013";
 		reg = <0x48>;
@@ -298,6 +310,9 @@
 	status = "okay";
 	#address-cells = <1>;
 	#size-cells = <0>;
+
+	samsung,i2c-sda-delay = <100>;
+	samsung,i2c-max-bus-freq = <400000>;
 
 	touchkey@49 {
 		compatible = "melfas,mip4_touchkey";
