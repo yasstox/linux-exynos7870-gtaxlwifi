@@ -167,6 +167,14 @@
 		samsung,pins = "gpd1-0";
 		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
 	};
+
+	bt_enable: bt-enable-pins {
+		samsung,pins = "gpd4-0";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_OUTPUT>;
+		samsung,pin-con-pdn = <EXYNOS_PIN_PDN_PREV>;
+		samsung,pin-pud-pdn = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_DOWN>;
+	};
 };
 
 &i2c1 {
@@ -482,6 +490,23 @@
 				regulator-ramp-delay = <12000>;
 			};
 		};
+	};
+};
+
+&uart0 {
+	status = "okay";
+
+	bluetooth {
+		compatible = "brcm,bcm43430a1-bt";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&bt_btwake &bt_hostwake &bt_enable>;
+
+		device-wakeup-gpios = <&gpa1 2 GPIO_ACTIVE_HIGH>;
+		host-wakeup-gpios = <&gpa1 6 GPIO_ACTIVE_HIGH>;
+		shutdown-gpios = <&gpd4 0 GPIO_ACTIVE_HIGH>;
+
+		max-speed = <3000000>;
 	};
 };
 
