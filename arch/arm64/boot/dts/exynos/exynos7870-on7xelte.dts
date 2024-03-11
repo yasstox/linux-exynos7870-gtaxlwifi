@@ -304,7 +304,7 @@
 		reg = <0x49>;
 
 		interrupt-parent = <&gpa1>;
-		interrupts = <4 IRQ_TYPE_EDGE_FALLING>;
+		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&tkey_irq>;
