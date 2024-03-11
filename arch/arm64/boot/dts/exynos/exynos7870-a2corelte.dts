@@ -25,6 +25,15 @@
 
 		ranges;
 
+		ramoops@46800000 {
+			compatible = "ramoops";
+			reg = <0x0 0x46800000 0x8000>;
+			record-size = <0x4000>;
+			console-size = <0x1000>;
+			ftrace-size = <0x1000>;
+			pmsg-size = <0x1000>;
+		};
+
 		bootloaderfb@67000000 {
 			reg = <0x0 0x67000000 0x1fb000>;
 			no-map;
