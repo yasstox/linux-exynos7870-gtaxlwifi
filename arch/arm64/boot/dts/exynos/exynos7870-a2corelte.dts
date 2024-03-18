@@ -107,6 +107,10 @@
 	};
 };
 
+&watchdog {
+	status = "okay";
+};
+
 &pinctrl0 {
 	key_power: key-power-pins {
 		samsung,pins = "gpa0-0";
