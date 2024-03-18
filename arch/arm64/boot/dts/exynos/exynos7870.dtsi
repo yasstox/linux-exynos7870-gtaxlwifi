@@ -194,6 +194,19 @@
 			};
 		};
 
+		watchdog: watchdog@10170000 {
+			compatible = "samsung,exynos7-wdt";
+			reg = <0x10170000 0x100>;
+			status = "disabled";
+
+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH>;
+
+			clock-names = "watchdog";
+			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_WDT_CPUCL0_IPCLKPORT_PCLK>;
+
+			samsung,syscon-phandle = <&pmu_system_controller>;
+		};
+
 		clkio_dispaud_audiocdclk0: clkio_dispaud_audiocdclk0 {
 			compatible = "fixed-clock";
 			#clock-cells = <0>;
