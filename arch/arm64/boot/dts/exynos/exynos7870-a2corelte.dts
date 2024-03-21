@@ -607,7 +607,11 @@
 	samsung,dw-mshc-ciu-div = <3>;
 	samsung,dw-mshc-sdr-timing = <0 3>;
 	samsung,dw-mshc-ddr-timing = <1 2>;
+	samsung,dw-mshc-sdr50-timing = <2 4>;
+	samsung,dw-mshc-sdr104-timing = <0 3>;
 	non-removable;
+	sd-uhs-sdr50;
+	sd-uhs-sdr104;
 	disable-wp;
 };
 
