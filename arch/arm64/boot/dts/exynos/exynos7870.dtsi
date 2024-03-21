@@ -33,9 +33,9 @@
 		uart0 = &uart0;
 		uart1 = &uart1;
 		uart2 = &uart2;
-		mshc0 = &dwmmc0;
-		mshc1 = &dwmmc1;
-		mshc2 = &dwmmc2;
+		mmc0 = &dwmmc0;
+		mmc1 = &dwmmc1;
+		mmc2 = &dwmmc2;
 	};
 
 	cpus {
@@ -780,7 +780,7 @@
 			samsung,fifo-size = <256>;
 		};
 
-		dwmmc0: dwmmc0@13540000 {
+		dwmmc0: dwmmc@13540000 {
 			compatible = "samsung,exynos7885-dw-mshc-smu";
 			reg = <0x13540000 0x2000>;
 			status = "disabled";
@@ -792,7 +792,7 @@
 				 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_MMC0>;
 		};
 
-		dwmmc1: dwmmc1@13550000 {
+		dwmmc1: dwmmc@13550000 {
 			compatible = "samsung,exynos7885-dw-mshc-smu";
 			reg = <0x13550000 0x2000>;
 			status = "disabled";
@@ -804,7 +804,7 @@
 				 <&cmu_mif CLK_GOUT_CLKCMU_FSYS_MMC1>;
 		};
 
-		dwmmc2: dwmmc2@13560000 {
+		dwmmc2: dwmmc@13560000 {
 			compatible = "samsung,exynos7885-dw-mshc-smu";
 			reg = <0x13560000 0x2000>;
 			status = "disabled";
