@@ -804,7 +804,7 @@
 				 <&cmu_g3d CLK_GOUT_CLK_G3D_UID_ASYNCS_D0_G3D_IPCLKPORT_I_CLK>;
 		};
 
-		usbdrd_phy: phy@135C0000 {
+		usbdrd_phy: phy@135c0000 {
 			compatible = "samsung,exynos7870-usbdrd-phy",
 				     "samsung,exynos7-usbdrd-phy";
 			reg = <0x135c0000 0x100>;
