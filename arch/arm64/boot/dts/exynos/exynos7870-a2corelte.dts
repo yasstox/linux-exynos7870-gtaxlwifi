@@ -574,10 +574,10 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
-	mmc-pwrseq = <&pwrseq_mmc1>;
-
 	pinctrl-names = "default";
 	pinctrl-0 = <&sd1_clk &sd1_cmd &sd1_bus1 &sd1_bus4>;
+
+	mmc-pwrseq = <&pwrseq_mmc1>;
 
 	bus-width = <4>;
 	fifo-depth = <64>;
