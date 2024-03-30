@@ -488,9 +488,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_IFPMIC_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c1: i2c@13880000 {
@@ -505,9 +502,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_MUIC_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c2: i2c@13890000 {
@@ -522,9 +516,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_NFC_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c3: i2c@13840000 {
@@ -539,9 +530,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_TSP_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c4: i2c@13830000 {
@@ -556,9 +544,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_FUELGAUGE_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c5: i2c@138d0000 {
@@ -573,9 +558,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SENSOR1_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c6: i2c@138e0000 {
@@ -590,9 +572,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SENSOR2_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c7: i2c@13850000 {
@@ -607,9 +586,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_TOUCHKEY_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		i2c8: i2c@13860000 {
@@ -624,9 +600,6 @@
 
 			clock-names = "i2c";
 			clocks = <&cmu_peri CLK_GOUT_CLK_PERI_UID_I2C_SPKAMP_IPCLKPORT_PCLK>;
-
-			samsung,i2c-sda-delay = <100>;
-			samsung,i2c-max-bus-freq = <400000>;
 		};
 
 		hsi2c0: hsi2c@10510000 {
