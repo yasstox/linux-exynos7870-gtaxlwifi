@@ -619,10 +619,6 @@
 	};
 };
 
-&gpu {
-	status = "okay";
-};
-
 &dwmmc0 {
 	status = "okay";
 
@@ -691,6 +687,10 @@
 	sd-uhs-sdr50;
 	sd-uhs-sdr104;
 	disable-wp;
+};
+
+&gpu {
+	status = "okay";
 };
 
 &usbdrd {
