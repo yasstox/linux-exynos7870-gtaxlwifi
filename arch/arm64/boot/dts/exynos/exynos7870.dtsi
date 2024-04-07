@@ -42,92 +42,92 @@
 		#address-cells = <1>;
 		#size-cells = <0>;
 
-		cpu@0 {
+		cpu-map {
+			cluster0 {
+				core0 {
+					cpu = <&cpu0>;
+				};
+				core1 {
+					cpu = <&cpu1>;
+				};
+				core2 {
+					cpu = <&cpu2>;
+				};
+				core3 {
+					cpu = <&cpu3>;
+				};
+			};
+
+			cluster1 {
+				core0 {
+					cpu = <&cpu4>;
+				};
+				core1 {
+					cpu = <&cpu5>;
+				};
+				core2 {
+					cpu = <&cpu6>;
+				};
+				core3 {
+					cpu = <&cpu7>;
+				};
+			};
+		};
+
+		cpu0: cpu@0 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x0>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_boot>;
 		};
 
-		cpu@1 {
+		cpu1: cpu@1 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x1>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_boot>;
 		};
 
-		cpu@2 {
+		cpu2: cpu@2 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x2>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_boot>;
 		};
 
-		cpu@3 {
+		cpu3: cpu@3 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x3>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_boot>;
 		};
 
-		cpu@100 {
+		cpu4: cpu@100 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x100>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_nonboot>;
 		};
 
-		cpu@101 {
+		cpu5: cpu@101 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x101>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_nonboot>;
 		};
 
-		cpu@102 {
+		cpu6: cpu@102 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x102>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_nonboot>;
 		};
 
-		cpu@103 {
+		cpu7: cpu@103 {
 			device_type = "cpu";
 			compatible = "arm,cortex-a53", "arm,armv8";
 			reg = <0x103>;
 			enable-method = "psci";
-			cpu-idle-states = <&sleep_nonboot>;
-		};
-
-		idle-states {
-			entry-method = "arm,psci";
-
-			sleep_boot: cpu-sleep-boot {
-				compatible = "exynos,idle-state";
-				status = "okay";
-
-				arm,psci-suspend-param = <0x10000>;
-				entry-latency-us = <35>;
-				exit-latency-us = <90>;
-				min-residency-us = <750>;
-			};
-
-			sleep_nonboot: cpu-sleep-nonboot {
-				compatible = "exynos,idle-state";
-				status = "okay";
-
-				arm,psci-suspend-param = <0x10000>;
-				entry-latency-us = <35>;
-				exit-latency-us = <90>;
-				min-residency-us = <750>;
-			};
 		};
 	};
 
