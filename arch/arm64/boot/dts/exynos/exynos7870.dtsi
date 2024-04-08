@@ -192,6 +192,26 @@
 				mode-download = <EXYNOS7870_BOOT_DOWNLOAD>;
 				mode-recovery = <EXYNOS7870_BOOT_RECOVERY>;
 			};
+
+			mipi_phy: mipi-phy {
+				compatible = "samsung,exynos7870-mipi-video-phy";
+				#phy-cells = <1>;
+
+				samsung,disp-sysreg = <&syscon_disp>;
+				samsung,cam-sysreg = <&syscon_cam>;
+			};
+		};
+
+		syscon_disp: syscon@148f100c {
+			compatible = "samsung,exynos7870-disp-sysreg",
+				     "samsung,exynos7870-sysreg", "syscon";
+			reg = <0x148f100c 0x04>;
+		};
+
+		syscon_cam: syscon@144f1040 {
+			compatible = "samsung,exynos7870-cam-sysreg",
+				     "samsung,exynos7870-sysreg", "syscon";
+			reg = <0x144f1040 0x04>;
 		};
 
 		watchdog: watchdog@10170000 {
