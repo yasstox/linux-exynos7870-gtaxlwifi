@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-only
 /*
- * Copyright (C) 2023 ???
- * Author: ???
+ * Copyright (C) 2015 Samsung Electronics Co., Ltd.
+ * Copyright (C) 2024 ???
  *
  * Common Clock Framework support for Exynos7870.
  */
@@ -534,7 +534,7 @@ static const struct samsung_gate_clock mif_gate_clks[] __initconst = {
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_BUS, "gout_muxgate_clkcmu_dispaud_bus", "mout_clkcmu_dispaud_bus",
 	    CLK_CON_GAT_MIF_MUXGATE_CLKCMU_DISPAUD_BUS, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK, "gout_muxgate_clkcmu_dispaud_decon_int_eclk", "mout_clkcmu_dispaud_decon_int_eclk",
-	    CLK_CON_GAT_MIF_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK, 21, CLK_IS_CRITICAL, 0),
+	    CLK_CON_GAT_MIF_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK, "gout_muxgate_clkcmu_dispaud_decon_int_vclk", "mout_clkcmu_dispaud_decon_int_vclk",
 	    CLK_CON_GAT_MIF_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_FSYS_BUS, "gout_muxgate_clkcmu_fsys_bus", "mout_clkcmu_fsys_bus",
@@ -799,13 +799,13 @@ static const struct samsung_gate_clock dispaud_gate_clks[] __initconst = {
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_DISP, "gout_clk_dispaud_uid_clkcmu_dispaud_bus_disp", "gout_muxgate_clkcmu_dispaud_bus_user",
 	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_DISP, 2, CLK_IS_CRITICAL, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_PPMU, "gout_clk_dispaud_uid_clkcmu_dispaud_bus_ppmu", "gout_muxgate_clkcmu_dispaud_bus_user",
-	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_PPMU, 3, 0, 0),
+	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLKCMU_DISPAUD_BUS_PPMU, 3, CLK_IS_CRITICAL, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD, "gout_clk_dispaud_uid_clk_dispaud_apb_aud", "dout_clk_dispaud_apb",
 	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD, 2, 0, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD_AMP, "gout_clk_dispaud_uid_clk_dispaud_apb_aud_amp", "dout_clk_dispaud_apb",
 	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLK_DISPAUD_APB_AUD_AMP, 3, 0, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CLK_DISPAUD_APB_DISP, "gout_clk_dispaud_uid_clk_dispaud_apb_disp", "dout_clk_dispaud_apb",
-	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLK_DISPAUD_APB_DISP, 1, 0, 0),
+	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CLK_DISPAUD_APB_DISP, 1, CLK_IS_CRITICAL, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_AUD_I2S_BCLK_BT_IN, "gout_clk_dispaud_uid_con_dispaud_ipclkport_i_aud_i2s_bclk_bt_in", "clkio_dispaud_mixer_bclk_bt",
 	    CLK_CON_GAT_GATE_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_AUD_I2S_BCLK_BT_IN, 0, 0, 0),
 	GATE(CLK_GOUT_CLK_DISPAUD_UID_CON_DISPAUD_IPCLKPORT_I_AUD_I2S_BCLK_FM_IN, "gout_clk_dispaud_uid_con_dispaud_ipclkport_i_aud_i2s_bclk_fm_in", "clkio_dispaud_mixer_bclk_fm",
@@ -827,9 +827,9 @@ static const struct samsung_gate_clock dispaud_gate_clks[] __initconst = {
 	GATE(CLK_GOUT_MUXGATE_AUD_PLL, "gout_muxgate_aud_pll", "mout_aud_pll",
 	    CLK_CON_GAT_DISPAUD_MUXGATE_AUD_PLL, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_BUS_USER, "gout_muxgate_clkcmu_dispaud_bus_user", "mout_clkcmu_dispaud_bus_user",
-	    CLK_CON_GAT_MUXGATE_CLKCMU_DISPAUD_BUS_USER, 21, 0, 0),
+	    CLK_CON_GAT_MUXGATE_CLKCMU_DISPAUD_BUS_USER, 21, CLK_IS_CRITICAL, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK_USER, "gout_muxgate_clkcmu_dispaud_decon_int_eclk_user", "mout_clkcmu_dispaud_decon_int_eclk_user",
-	    CLK_CON_GAT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK_USER, 21, CLK_IS_CRITICAL, 0),
+	    CLK_CON_GAT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_ECLK_USER, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK_USER, "gout_muxgate_clkcmu_dispaud_decon_int_vclk_user", "mout_clkcmu_dispaud_decon_int_vclk_user",
 	    CLK_CON_GAT_MUXGATE_CLKCMU_DISPAUD_DECON_INT_VCLK_USER, 21, 0, 0),
 	GATE(CLK_GOUT_MUXGATE_CLKPHY_DISPAUD_MIPIPHY_RXCLKESC0_USER, "gout_muxgate_clkphy_dispaud_mipiphy_rxclkesc0_user", "mout_clkphy_dispaud_mipiphy_rxclkesc0_user",
