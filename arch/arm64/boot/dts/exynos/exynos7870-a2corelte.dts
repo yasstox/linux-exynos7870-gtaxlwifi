@@ -278,6 +278,10 @@
 			reg = <0x12>;
 			syna,sensor-type = <1>;
 			syna,rezero-wait-ms = <200>;
+			syna,clip-x-high = <539>;
+			syna,clip-y-high = <959>;
+			touchscreen-x-mm = <62>;
+			touchscreen-y-mm = <110>;
 		};
 	};
 };
