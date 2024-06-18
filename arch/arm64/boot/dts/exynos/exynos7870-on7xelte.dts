@@ -658,7 +658,7 @@
 	pio-mode;
 
 	wifi@1 {
-		compatible = "brcm,bcm43430a1-fmac";
+		compatible = "brcm,bcm43430a1-fmac", "brcm,bcm4329-fmac";
 		reg = <0x1>;
 
 		interrupt-names = "host-wake";
