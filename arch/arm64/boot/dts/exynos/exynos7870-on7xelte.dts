@@ -67,6 +67,7 @@
 
 	gpio-keys {
 		compatible = "gpio-keys";
+		label = "GPIO Keys";
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&key_power &key_volup &key_voldown &key_home>;
