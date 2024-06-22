@@ -83,6 +83,23 @@
 		};
 	};
 
+	gpio-hall-effect-sensor {
+		compatible = "gpio-keys";
+		label = "GPIO Hall Effect Sensor";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&hall_irq>;
+
+		event-hall-effect-sensor {
+			label = "Hall Effect Sensor";
+			gpios = <&gpa1 3 GPIO_ACTIVE_LOW>;
+			linux,input-type = <EV_SW>;
+			linux,code = <SW_LID>;
+			linux,can-disable;
+			wakeup-source;
+		};
+	};
+
 	vibrator {
 		compatible = "regulator-haptic";
 		haptic-supply = <&vdd_ldo32>;
@@ -123,6 +140,13 @@
 
 	key_voldown: key-voldown-pins {
 		samsung,pins = "gpa2-1";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
+	};
+
+	hall_irq: hall-irq {
+		samsung,pins = "gpa1-3";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
