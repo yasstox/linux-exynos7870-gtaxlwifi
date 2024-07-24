@@ -22,6 +22,7 @@
 #include <linux/mfd/samsung/s2mps14.h>
 #include <linux/mfd/samsung/s2mps15.h>
 #include <linux/mfd/samsung/s2mpu02.h>
+#include <linux/mfd/samsung/s2mu005.h>
 #include <linux/mfd/samsung/s5m8767.h>
 #include <linux/regmap.h>
 
@@ -88,6 +89,22 @@ static const struct mfd_cell s2mpu05_devs[] = {
 	{ .name = "s2mps15-rtc", },
 };
 
+static const struct mfd_cell s2mu005_devs[] = {
+	{
+		.name = "s2mu005-charger",
+		.of_compatible = "samsung,s2mu005-charger",
+	}, {
+		.name = "s2mu005-flash",
+		.of_compatible = "samsung,s2mu005-flash",
+	}, {
+		.name = "s2mu005-muic",
+		.of_compatible = "samsung,s2mu005-muic",
+	}, {
+		.name = "s2mu005-rgb",
+		.of_compatible = "samsung,s2mu005-rgb",
+	},
+};
+
 static const struct of_device_id sec_dt_match[] = {
 	{
 		.compatible = "samsung,s5m8767-pmic",
@@ -116,6 +133,9 @@ static const struct of_device_id sec_dt_match[] = {
 	}, {
 		.compatible = "samsung,s2mpu05-pmic",
 		.data = (void *)S2MPU05,
+	}, {
+		.compatible = "samsung,s2mu005-pmic",
+		.data = (void *)S2MU005,
 	}, {
 		/* Sentinel */
 	},
@@ -152,6 +172,19 @@ static bool s2mpu02_volatile(struct device *dev, unsigned int reg)
 	case S2MPU02_REG_INT1M:
 	case S2MPU02_REG_INT2M:
 	case S2MPU02_REG_INT3M:
+		return false;
+	default:
+		return true;
+	}
+}
+
+static bool s2mu005_volatile(struct device *dev, unsigned int reg)
+{
+	switch (reg) {
+	case S2MU005_REG_CHGR_INT1M:
+	case S2MU005_REG_FLED_INT1M:
+	case S2MU005_REG_MUIC_INT1M:
+	case S2MU005_REG_MUIC_INT2M:
 		return false;
 	default:
 		return true;
@@ -214,6 +247,15 @@ static const struct regmap_config s2mpu02_regmap_config = {
 
 	.max_register = S2MPU02_REG_DVSDATA,
 	.volatile_reg = s2mpu02_volatile,
+	.cache_type = REGCACHE_FLAT,
+};
+
+static const struct regmap_config s2mu005_regmap_config = {
+	.reg_bits = 8,
+	.val_bits = 8,
+
+	.max_register = S2MU005_REG_MUIC_LDOADC_H,
+	.volatile_reg = s2mu005_volatile,
 	.cache_type = REGCACHE_FLAT,
 };
 
@@ -332,6 +374,9 @@ static int sec_pmic_probe(struct i2c_client *i2c)
 	case S2MPU02:
 		regmap = &s2mpu02_regmap_config;
 		break;
+	case S2MU005:
+		regmap = &s2mu005_regmap_config;
+		break;
 	default:
 		regmap = &sec_regmap_config;
 		break;
@@ -385,6 +430,10 @@ static int sec_pmic_probe(struct i2c_client *i2c)
 	case S2MPU05:
 		sec_devs = s2mpu05_devs;
 		num_sec_devs = ARRAY_SIZE(s2mpu05_devs);
+		break;
+	case S2MU005:
+		sec_devs = s2mu005_devs;
+		num_sec_devs = ARRAY_SIZE(s2mu005_devs);
 		break;
 	default:
 		dev_err(&i2c->dev, "Unsupported device type (%lu)\n",
