@@ -640,7 +640,7 @@ static int s5m_rtc_probe(struct platform_device *pdev)
 	struct s5m_rtc_info *info;
 	struct i2c_client *i2c;
 	const struct regmap_config *regmap_cfg;
-	int ret, alarm_irq;
+	int ret, alarm_irq, irq_chip;
 
 	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
 	if (!info)
@@ -651,21 +651,25 @@ static int s5m_rtc_probe(struct platform_device *pdev)
 		regmap_cfg = &s2mps14_rtc_regmap_config;
 		info->regs = &s2mps15_rtc_regs;
 		alarm_irq = S2MPS14_IRQ_RTCA0;
+		irq_chip = S2MPS14_IRQ_CHIP;
 		break;
 	case S2MPS14X:
 		regmap_cfg = &s2mps14_rtc_regmap_config;
 		info->regs = &s2mps14_rtc_regs;
 		alarm_irq = S2MPS14_IRQ_RTCA0;
+		irq_chip = S2MPS14_IRQ_CHIP;
 		break;
 	case S2MPS13X:
 		regmap_cfg = &s2mps14_rtc_regmap_config;
 		info->regs = &s2mps13_rtc_regs;
 		alarm_irq = S2MPS14_IRQ_RTCA0;
+		irq_chip = S2MPS14_IRQ_CHIP;
 		break;
 	case S5M8767X:
 		regmap_cfg = &s5m_rtc_regmap_config;
 		info->regs = &s5m_rtc_regs;
 		alarm_irq = S5M8767_IRQ_RTCA1;
+		irq_chip = S5M8767_IRQ_CHIP;
 		break;
 	default:
 		return dev_err_probe(&pdev->dev, -ENODEV,
@@ -688,12 +692,14 @@ static int s5m_rtc_probe(struct platform_device *pdev)
 	info->s5m87xx = s5m87xx;
 	info->device_type = platform_get_device_id(pdev)->driver_data;
 
-	if (s5m87xx->irq_data) {
-		info->irq = regmap_irq_get_virq(s5m87xx->irq_data, alarm_irq);
-		if (info->irq <= 0)
+	if (s5m87xx->irq_data[irq_chip]) {
+		info->irq = regmap_irq_get_virq(s5m87xx->irq_data[irq_chip],
+						alarm_irq);
+		if (info->irq <= 0) {
 			return dev_err_probe(&pdev->dev, -EINVAL,
-					     "Failed to get virtual IRQ %d\n",
+					     "failed to get virtual irq %d\n",
 					     alarm_irq);
+		}
 	}
 
 	platform_set_drvdata(pdev, info);
