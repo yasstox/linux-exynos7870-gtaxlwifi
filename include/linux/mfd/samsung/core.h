@@ -59,6 +59,7 @@ enum sec_device_type {
  * @regmap_pmic:	Regmap associated with PMIC's I2C address
  * @i2c:		I2C client of the main driver
  * @device_type:	Type of device, matches enum sec_device_type
+ * @revision:		Revision number of the device
  * @irq_base:		Base IRQ number for device, required for IRQs
  * @irq:		Generic IRQ number for device
  * @irq_data:		Runtime data structure for IRQ controller
@@ -71,6 +72,7 @@ struct sec_pmic_dev {
 	struct i2c_client *i2c;
 
 	unsigned long device_type;
+	unsigned int revision;
 	int irq;
 	struct regmap_irq_chip_data *irq_data[MAX_IRQ_CHIPS];
 };
