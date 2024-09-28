@@ -378,10 +378,18 @@ static const struct imagis_properties imagis_3038c_data = {
 	.whoami_val = IST3038C_WHOAMI,
 };
 
+static const struct imagis_properties imagis_3038h_data = {
+	.interrupt_msg_cmd = IST3038C_REG_INTR_MESSAGE,
+	.touch_coord_cmd = IST3038C_REG_TOUCH_COORD,
+	.whoami_cmd = IST3038C_REG_CHIPID,
+	.whoami_val = 0x38D,
+};
+
 #ifdef CONFIG_OF
 static const struct of_device_id imagis_of_match[] = {
 	{ .compatible = "imagis,ist3038b", .data = &imagis_3038b_data },
 	{ .compatible = "imagis,ist3038c", .data = &imagis_3038c_data },
+	{ .compatible = "imagis,ist3038h", .data = &imagis_3038h_data },
 	{ },
 };
 MODULE_DEVICE_TABLE(of, imagis_of_match);
