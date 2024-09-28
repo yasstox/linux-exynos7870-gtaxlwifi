@@ -19,6 +19,7 @@ properties:
   compatible:
     enum:
       - imagis,ist3038c
+      - imagis,ist3038h
 
   reg:
     maxItems: 1
