@@ -26,6 +26,7 @@ properties:
           - samsung,s5pv210-uart
           - samsung,exynos4210-uart
           - samsung,exynos5433-uart
+          - samsung,exynos7870-uart
           - samsung,exynos850-uart
       - items:
           - enum:
@@ -115,6 +116,16 @@ allOf:
             - const: uart
             - pattern: '^clk_uart_baud[0-1]$'
             - pattern: '^clk_uart_baud[0-1]$'
+
+  - if:
+      properties:
+        compatible:
+          contains:
+            enum:
+              - samsung,exynos7870-uart
+    then:
+      required:
+        - samsung,uart-fifosize
 
   - if:
       properties:
