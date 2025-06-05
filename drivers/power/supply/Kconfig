@@ -226,6 +226,14 @@ config BATTERY_SAMSUNG_SDI
 	  Say Y to enable support for Samsung SDI battery data.
 	  These batteries are used in Samsung mobile phones.
 
+config BATTERY_S2MU005
+	tristate "Samsung S2MU005 PMIC fuel gauge driver"
+	help
+	  Say Y to enable support for the Samsung S2MU005 PMIC integrated
+	  fuel gauge.
+
+	  This driver, if built as a module, will be called s2mu005-fuel-gauge.
+
 config CHARGER_S2M
 	tristate "Samsung S2M series PMIC battery charger support"
 	depends on EXTCON_S2M
