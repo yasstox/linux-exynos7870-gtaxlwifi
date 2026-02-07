@@ -9,6 +9,7 @@ dtb-$(CONFIG_ARCH_EXYNOS) += \
 	exynos7-espresso.dtb		\
 	exynos7870-a2corelte.dtb	\
 	exynos7870-a6lte.dtb		\
+	exynos7870-gtaxlwifi.dtb	\
 	exynos7870-j5y17lte.dtb		\
 	exynos7870-j6lte.dtb		\
 	exynos7870-j7xelte.dtb		\
