@@ -84,6 +84,16 @@
 		post-power-on-delay-ms = <200>;
 	};
 
+	vdd_wlan_3p3: regulator-wlan-3p3 {
+		compatible = "regulator-fixed";
+		regulator-name = "cnss_dcdc_en";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpa0 6 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		startup-delay-us = <4000>;
+	};
+
 	vdd_fixed_mmc2: regulator-fixed-mmc2 {
 		compatible = "regulator-fixed";
 		regulator-name = "vdd_fixed_mmc2";
@@ -463,13 +473,15 @@
 
 	mmc-pwrseq = <&pwrseq_mmc1>;
 
+	vmmc-supply = <&vdd_wlan_3p3>;
+
 	bus-width = <4>;
+	max-frequency = <25000000>;
 	fifo-depth = <64>;
 	samsung,dw-mshc-ciu-div = <3>;
 	samsung,dw-mshc-sdr-timing = <0 3>;
 	samsung,dw-mshc-ddr-timing = <1 2>;
 	non-removable;
-	cap-sd-highspeed;
 	cap-sdio-irq;
 	pio-mode;
 	status = "okay";
