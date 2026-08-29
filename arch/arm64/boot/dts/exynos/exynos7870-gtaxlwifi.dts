@@ -103,9 +103,24 @@
 		enable-active-high;
 	};
 
-	vdd_dummy_touch: regulator-fixed-touch {
+	tsp_dvdd: regulator-touch-dvdd {
 		compatible = "regulator-fixed";
-		regulator-name = "vdd_dummy_touch";
+		regulator-name = "tsp_dvdd";
+		regulator-min-microvolt = <1800000>;
+		regulator-max-microvolt = <1800000>;
+		gpio = <&gpd1 4 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		startup-delay-us = <5000>;
+	};
+
+	tsp_avdd: regulator-touch-avdd {
+		compatible = "regulator-fixed";
+		regulator-name = "tsp_avdd";
+		regulator-min-microvolt = <3300000>;
+		regulator-max-microvolt = <3300000>;
+		gpio = <&gpd1 6 GPIO_ACTIVE_HIGH>;
+		enable-active-high;
+		startup-delay-us = <5000>;
 	};
 
 	reserved-memory {
@@ -283,9 +298,7 @@
 				regulator-min-microvolt = <800000>;
 				regulator-max-microvolt = <2375000>;
 				regulator-ramp-delay = <12000>;
-
 				regulator-boot-on;
-
 				regulator-always-on;
 			};
 
@@ -341,9 +354,7 @@
 				regulator-min-microvolt = <3300000>;
 				regulator-max-microvolt = <3300000>;
 				regulator-ramp-delay = <12000>;
-
 				regulator-boot-on;
-
 				regulator-always-on;
 			};
 
@@ -360,16 +371,15 @@
 				regulator-name = "vdd_ldo35";
 				regulator-min-microvolt = <2800000>;
 				regulator-max-microvolt = <2800000>;
-
 				regulator-boot-on;
-
 				regulator-always-on;
 			};
 		};
 	};
 };
 
-&i2c3 {
+/* Samsung vendor hardware: STMicro FTS on I2C1 at 0x49. */
+&i2c1 {
 	#address-cells = <1>;
 	#size-cells = <0>;
 	status = "okay";
@@ -377,36 +387,21 @@
 	samsung,i2c-max-bus-freq = <400000>;
 	samsung,i2c-sda-delay = <100>;
 
-	touchscreen@70 {
-		compatible = "syna,rmi4-i2c";
-		reg = <0x70>;
-		interrupt-parent = <&gpc3>;
-		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+	touchscreen@49 {
+		compatible = "st,stmfts";
+		reg = <0x49>;
+		interrupt-parent = <&gpa0>;
+		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&touch_irq>;
 
-		vdd-supply = <&vdd_dummy_touch>;
-		vio-supply = <&vdd_ldo29>;
+		vdd-supply = <&tsp_dvdd>;
+		avdd-supply = <&tsp_avdd>;
 
-		syna,reset-delay-ms = <200>;
-		syna,startup-delay-ms = <200>;
-
-		#address-cells = <1>;
-		#size-cells = <0>;
-
-		rmi4-f01@1 {
-			reg = <0x01>;
-			syna,nosleep-mode = <1>;
-		};
-
-		rmi4-f12@12 {
-			reg = <0x12>;
-			syna,sensor-type = <1>;
-			syna,rezero-wait-ms = <200>;
-			touchscreen-size-x = <1200>;
-			touchscreen-size-y = <1920>;
-		};
+		touchscreen-size-x = <1200>;
+		touchscreen-size-y = <1920>;
+		touch-key-connected;
 	};
 };
 
@@ -426,26 +421,6 @@
 
 		pinctrl-names = "default";
 		pinctrl-0 = <&fuel_irq>;
-	};
-};
-
-&i2c7 {
-	#address-cells = <1>;
-	#size-cells = <0>;
-	status = "okay";
-
-	samsung,i2c-max-bus-freq = <400000>;
-	samsung,i2c-sda-delay = <100>;
-
-	touchkey@49 {
-		compatible = "melfas,mip4_touchkey";
-		reg = <0x49>;
-		interrupt-parent = <&gpa1>;
-		interrupts = <4 IRQ_TYPE_LEVEL_LOW>;
-		linux,keycodes = <KEY_APPSELECT KEY_BACK>;
-
-		pinctrl-names = "default";
-		pinctrl-0 = <&tkey_irq>;
 	};
 };
 
@@ -566,17 +541,17 @@
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
 	};
 
-	tkey_irq: tkey-irq-pins {
-		samsung,pins = "gpa1-4";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
-	};
-
 	wlan_hostwake: wlan-hostwake-pins {
 		samsung,pins = "gpa2-2";
 		samsung,pin-function = <EXYNOS_PIN_FUNC_INPUT>;
 		samsung,pin-pud = <EXYNOS_PIN_PULL_UP>;
+	};
+
+	touch_irq: touch-irq-pins {
+		samsung,pins = "gpa0-4";
+		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
+		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
+		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 };
 
@@ -589,15 +564,6 @@
 		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
 		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR4>;
 		samsung,pin-val = <0>;
-	};
-};
-
-&pinctrl_touch {
-	touch_irq: touch-irq-pins {
-		samsung,pins = "gpc3-2";
-		samsung,pin-function = <EXYNOS_PIN_FUNC_EINT>;
-		samsung,pin-pud = <EXYNOS_PIN_PULL_NONE>;
-		samsung,pin-drv = <EXYNOS5433_PIN_DRV_FAST_SR1>;
 	};
 };
 
