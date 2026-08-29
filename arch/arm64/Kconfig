@@ -2402,6 +2402,12 @@ config CMDLINE_FROM_BOOTLOADER
 	  the boot loader doesn't provide any, the default kernel command
 	  string provided in CMDLINE will be used.
 
+config CMDLINE_EXTEND
+	bool "Extend bootloader kernel arguments with the default kernel command string"
+	help
+	  Append the default kernel command string from CONFIG_CMDLINE to
+	  the command line supplied by the bootloader instead of replacing it.
+
 config CMDLINE_FORCE
 	bool "Always use the default kernel command string"
 	help

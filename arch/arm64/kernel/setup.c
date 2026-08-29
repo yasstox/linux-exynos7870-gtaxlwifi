@@ -10,6 +10,7 @@
 #include <linux/export.h>
 #include <linux/kernel.h>
 #include <linux/stddef.h>
+#include <linux/string.h>
 #include <linux/ioport.h>
 #include <linux/delay.h>
 #include <linux/initrd.h>
@@ -314,6 +315,18 @@ void __init __no_sanitize_address setup_arch(char **cmdline_p)
 	early_ioremap_init();
 
 	setup_machine_fdt(__fdt_pointer);
+
+#ifdef CONFIG_CMDLINE_EXTEND
+	/*
+	 * Some Samsung bootloaders provide their own command line and ignore
+	 * the one from the boot image. Preserve the firmware arguments and
+	 * append CONFIG_CMDLINE for development/debugging.
+	 */
+	if (CONFIG_CMDLINE[0]) {
+		strlcat(boot_command_line, " ", COMMAND_LINE_SIZE);
+		strlcat(boot_command_line, CONFIG_CMDLINE, COMMAND_LINE_SIZE);
+	}
+#endif
 
 	/*
 	 * Initialise the static keys early as they may be enabled by the
