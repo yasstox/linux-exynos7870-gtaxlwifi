@@ -1,3 +1,45 @@
+## About this repository
+
+This repository is a development mirror of the Exynos7870 mainline Linux kernel used for the Samsung Galaxy Tab A 10.1 2016 (SM-T580 / `gtaxlwifi`) postmarketOS port.
+
+Upstream repository:
+
+`https://gitlab.com/exynos7870-mainline/linux`
+
+This mirror keeps the upstream Git history and adds device-specific development branches and patches required for the SM-T580 port.
+
+The upstream repository remains the primary source for general Exynos7870 kernel development. This mirror is maintained so that the SM-T580-specific work can be developed, tested, backed up and reproduced independently while still tracking upstream changes.
+
+No ownership of upstream Linux or Exynos7870 code is claimed by this repository.
+
+### Licensing
+
+The Linux kernel as a whole is provided under GPL-2.0-only, subject to the licensing rules described by the Linux kernel project.
+
+Individual files may use different GPL-compatible or dual-license SPDX expressions. Existing copyright notices, SPDX identifiers, license files and attribution must be preserved.
+
+Device-specific changes in this repository should follow the licensing requirements of the files they modify.
+
+See:
+
+* `COPYING`
+* `LICENSES/`
+* `https://docs.kernel.org/process/license-rules.html`
+
+### Development model
+
+The repository is intended to use:
+
+`origin` — this mirror
+
+`upstream` — the Exynos7870 mainline Linux repository
+
+Additional reference remotes may also be configured locally for earlier SM-T580 ports.
+
+Upstream changes are fetched and tested before being merged into the SM-T580 development branch. Known-good revisions are recorded by the parent `gtaxlwifi-port` meta-repository.
+
+---------------------------------------------
+
 Linux kernel
 ============
 
