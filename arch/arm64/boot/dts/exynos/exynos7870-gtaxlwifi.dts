@@ -591,6 +591,7 @@
 	#address-cells = <1>;
 	#size-cells = <0>;
 
+	samsung,burst-clock-frequency = <980000000>;
 	samsung,esc-clock-frequency = <16000000>;
 	samsung,pll-clock-frequency = <26000000>;
 
