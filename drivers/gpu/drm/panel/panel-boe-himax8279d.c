@@ -238,15 +238,18 @@ static const struct drm_panel_funcs panel_funcs = {
 };
 
 static const struct drm_display_mode default_display_mode = {
-	.clock = 159420,
+	/* Samsung SM-T580 HX8279D timings */
+	.clock = 159610,
+
 	.hdisplay = 1200,
-	.hsync_start = 1200 + 80,
-	.hsync_end = 1200 + 80 + 60,
-	.htotal = 1200 + 80 + 60 + 24,
+	.hsync_start = 1200 + 120,
+	.hsync_end = 1200 + 120 + 8,
+	.htotal = 1200 + 120 + 8 + 32,
+
 	.vdisplay = 1920,
-	.vsync_start = 1920 + 10,
-	.vsync_end = 1920 + 10 + 14,
-	.vtotal = 1920 + 10 + 14 + 4,
+	.vsync_start = 1920 + 16,
+	.vsync_end = 1920 + 16 + 4,
+	.vtotal = 1920 + 16 + 4 + 16,
 };
 
 /* 8 inch */
