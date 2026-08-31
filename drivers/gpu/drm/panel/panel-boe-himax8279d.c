@@ -47,6 +47,8 @@ struct panel_info {
 	struct gpio_desc *enable_gpio;
 	struct gpio_desc *pp33_gpio;
 	struct gpio_desc *pp18_gpio;
+
+	bool bootloader_handoff;
 };
 
 static inline struct panel_info *to_panel_info(struct drm_panel *panel)
@@ -56,6 +58,9 @@ static inline struct panel_info *to_panel_info(struct drm_panel *panel)
 
 static void disable_gpios(struct panel_info *pinfo)
 {
+	if (pinfo->bootloader_handoff)
+		return;
+
 	gpiod_set_value(pinfo->enable_gpio, 0);
 	gpiod_set_value(pinfo->pp33_gpio, 0);
 	gpiod_set_value(pinfo->pp18_gpio, 0);
@@ -83,6 +88,9 @@ static int boe_panel_disable(struct drm_panel *panel)
 	struct panel_info *pinfo = to_panel_info(panel);
 	int err;
 
+	if (pinfo->bootloader_handoff)
+		return 0;
+
 	err = mipi_dsi_dcs_set_display_off(pinfo->link);
 	if (err < 0) {
 		dev_err(panel->dev, "failed to set display off: %d\n", err);
@@ -96,6 +104,9 @@ static int boe_panel_unprepare(struct drm_panel *panel)
 {
 	struct panel_info *pinfo = to_panel_info(panel);
 	int err;
+
+	if (pinfo->bootloader_handoff)
+		return 0;
 
 	err = mipi_dsi_dcs_set_display_off(pinfo->link);
 	if (err < 0)
@@ -117,6 +128,9 @@ static int boe_panel_prepare(struct drm_panel *panel)
 {
 	struct panel_info *pinfo = to_panel_info(panel);
 	int err;
+
+	if (pinfo->bootloader_handoff)
+		return 0;
 
 	gpiod_set_value(pinfo->pp18_gpio, 1);
 	/* T1: 5ms - 6ms */
@@ -176,6 +190,9 @@ static int boe_panel_enable(struct drm_panel *panel)
 	struct panel_info *pinfo = to_panel_info(panel);
 	int ret;
 
+	if (pinfo->bootloader_handoff)
+		return 0;
+
 	usleep_range(120000, 121000);
 
 	ret = mipi_dsi_dcs_set_display_on(pinfo->link);
@@ -221,15 +238,18 @@ static const struct drm_panel_funcs panel_funcs = {
 };
 
 static const struct drm_display_mode default_display_mode = {
-	.clock = 159420,
+	/* Samsung SM-T580 HX8279D timings */
+	.clock = 159610,
+
 	.hdisplay = 1200,
-	.hsync_start = 1200 + 80,
-	.hsync_end = 1200 + 80 + 60,
-	.htotal = 1200 + 80 + 60 + 24,
+	.hsync_start = 1200 + 120,
+	.hsync_end = 1200 + 120 + 8,
+	.htotal = 1200 + 120 + 8 + 32,
+
 	.vdisplay = 1920,
-	.vsync_start = 1920 + 10,
-	.vsync_end = 1920 + 10 + 14,
-	.vtotal = 1920 + 10 + 14 + 4,
+	.vsync_start = 1920 + 16,
+	.vsync_end = 1920 + 16 + 4,
+	.vtotal = 1920 + 16 + 4 + 16,
 };
 
 /* 8 inch */
@@ -819,6 +839,10 @@ static const struct of_device_id panel_of_match[] = {
 		.data = &boe_himax8279d10p_panel_desc,
 	},
 	{
+		.compatible = "samsung,gtaxlwifi-himax8279d",
+		.data = &boe_himax8279d10p_panel_desc,
+	},
+	{
 		/* sentinel */
 	}
 };
@@ -828,6 +852,12 @@ static int panel_add(struct panel_info *pinfo)
 {
 	struct device *dev = &pinfo->link->dev;
 	int ret;
+
+	pinfo->bootloader_handoff =
+		device_property_read_bool(dev, "samsung,bootloader-handoff");
+
+	if (pinfo->bootloader_handoff)
+		goto add_panel;
 
 	pinfo->pp18_gpio = devm_gpiod_get(dev, "pp18", GPIOD_OUT_HIGH);
 	if (IS_ERR(pinfo->pp18_gpio)) {
@@ -843,10 +873,11 @@ static int panel_add(struct panel_info *pinfo)
 
 	pinfo->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_HIGH);
 	if (IS_ERR(pinfo->enable_gpio)) {
-		return	dev_err_probe(dev, PTR_ERR(pinfo->enable_gpio),
-						 "failed to get enable gpio\n");
+		return dev_err_probe(dev, PTR_ERR(pinfo->enable_gpio),
+				     "failed to get enable gpio\n");
 	}
 
+add_panel:
 	ret = drm_panel_of_backlight(&pinfo->base);
 	if (ret)
 		return ret;

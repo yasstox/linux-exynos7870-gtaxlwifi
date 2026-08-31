@@ -576,3 +576,31 @@
 	vdd33-supply = <&vdd_ldo8>;
 	status = "okay";
 };
+
+/*
+ * Native display bring-up experiment.
+ *
+ * The panel is intentionally left powered and initialized by the
+ * bootloader. This first stage only validates DECON -> DSIM scanout.
+ */
+&decon {
+	status = "okay";
+};
+
+&dsi {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	samsung,burst-clock-frequency = <980000000>;
+	samsung,esc-clock-frequency = <16000000>;
+	samsung,pll-clock-frequency = <26000000>;
+
+	status = "okay";
+
+	panel@0 {
+		compatible = "samsung,gtaxlwifi-himax8279d";
+		reg = <0>;
+
+		samsung,bootloader-handoff;
+	};
+};
