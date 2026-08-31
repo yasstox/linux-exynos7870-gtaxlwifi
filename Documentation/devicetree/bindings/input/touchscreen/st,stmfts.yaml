@@ -37,6 +37,13 @@ properties:
     type: boolean
     description: The touchkey feature is connected
 
+  st,legacy-protocol:
+    type: boolean
+    description:
+      Use the legacy FTS command protocol found on older Samsung devices.
+      These controllers use a B6 register command for reset and interrupt
+      control instead of command-completion IRQs.
+
   vdd-supply:
     description: Power supply
 
