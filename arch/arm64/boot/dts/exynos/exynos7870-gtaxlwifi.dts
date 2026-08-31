@@ -415,7 +415,7 @@
 	samsung,i2c-sda-delay = <100>;
 
 	fuelgauge@3b {
-		compatible = "samsung,s2mu005-fg";
+		compatible = "samsung,s2mu005-fuel-gauge";
 		reg = <0x3b>;
 		interrupt-parent = <&gpa0>;
 		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
