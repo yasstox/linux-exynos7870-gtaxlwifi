@@ -612,3 +612,100 @@
 		samsung,bootloader-handoff;
 	};
 };
+
+/* GTAXLWIFI_CPUFREQ_BEGIN */
+
+/*
+ * Initial CPUFreq validation for Samsung Galaxy Tab A 10.1 (SM-T580).
+ *
+ * The Samsung downstream CAL/ASV table reports 737500 uV for the
+ * nominal 902 MHz level on this ASV group 7 device.
+ *
+ * Keep a single OPP at the current CCF boot rate for the first test.
+ * This validates CPU -> CCF -> OPP -> regulator -> cpufreq-dt without
+ * intentionally changing the CPU PLL yet.
+ */
+
+&cpu0 {
+	clocks = <&cmu_cpucl0 CLK_MOUT_CPUCL0>;
+	operating-points-v2 = <&cpucl0_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu1 {
+	clocks = <&cmu_cpucl0 CLK_MOUT_CPUCL0>;
+	operating-points-v2 = <&cpucl0_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu2 {
+	clocks = <&cmu_cpucl0 CLK_MOUT_CPUCL0>;
+	operating-points-v2 = <&cpucl0_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu3 {
+	clocks = <&cmu_cpucl0 CLK_MOUT_CPUCL0>;
+	operating-points-v2 = <&cpucl0_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu4 {
+	clocks = <&cmu_cpucl1 CLK_MOUT_CPUCL1>;
+	operating-points-v2 = <&cpucl1_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu5 {
+	clocks = <&cmu_cpucl1 CLK_MOUT_CPUCL1>;
+	operating-points-v2 = <&cpucl1_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu6 {
+	clocks = <&cmu_cpucl1 CLK_MOUT_CPUCL1>;
+	operating-points-v2 = <&cpucl1_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+&cpu7 {
+	clocks = <&cmu_cpucl1 CLK_MOUT_CPUCL1>;
+	operating-points-v2 = <&cpucl1_opp_table>;
+	cpu-supply = <&vdd_buck1>;
+};
+
+/ {
+	cpucl0_opp_table: opp-table-cpucl0 {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp-902200000 {
+			opp-hz = /bits/ 64 <902200000>;
+			opp-microvolt = <737500>;
+		};
+
+		/* First dynamic-clock test: intentionally keep 902 MHz voltage. */
+		opp-839800000 {
+			opp-hz = /bits/ 64 <839800000>;
+			opp-microvolt = <737500>;
+		};
+	};
+
+	cpucl1_opp_table: opp-table-cpucl1 {
+		compatible = "operating-points-v2";
+		opp-shared;
+
+		opp-902200000 {
+			opp-hz = /bits/ 64 <902200000>;
+			opp-microvolt = <737500>;
+		};
+
+		/* First dynamic-clock test: intentionally keep 902 MHz voltage. */
+		opp-839800000 {
+			opp-hz = /bits/ 64 <839800000>;
+			opp-microvolt = <737500>;
+		};
+	};
+};
+
+/* GTAXLWIFI_CPUFREQ_END */

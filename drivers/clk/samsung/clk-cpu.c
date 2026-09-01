@@ -403,6 +403,67 @@ static int exynos5433_cpuclk_post_rate_change(struct clk_notifier_data *ndata,
 	return 0;
 }
 
+
+/* ---- Exynos7870 ---------------------------------------------------------- */
+
+#define E7870_CPU_MUX_SEL		BIT(12)
+#define E7870_CPU_MUX_SETTLE_US		10
+
+static const struct exynos_cpuclk_regs e7870_cpuclk_regs = {
+	.mux = 0x0208,
+};
+
+static int exynos7870_cpuclk_pre_rate_change(
+		struct clk_notifier_data *ndata,
+		struct exynos_cpuclk *cpuclk)
+{
+	const struct exynos_cpuclk_regs * const regs = cpuclk->chip->regs;
+	void __iomem *base = cpuclk->base;
+	unsigned long flags;
+	u32 mux_reg;
+
+	/*
+	 * Use the MIF-derived switch clock while the CPU PLL is being
+	 * reprogrammed.
+	 *
+	 * For the initial 902.2 <-> 839.8 MHz validation the alternate
+	 * parent (~799.5 MHz) is lower than both OPPs, so no temporary
+	 * divider is required.
+	 */
+	spin_lock_irqsave(cpuclk->lock, flags);
+
+	mux_reg = readl(base + regs->mux);
+	writel(mux_reg | E7870_CPU_MUX_SEL, base + regs->mux);
+
+	udelay(E7870_CPU_MUX_SETTLE_US);
+
+	spin_unlock_irqrestore(cpuclk->lock, flags);
+
+	return 0;
+}
+
+static int exynos7870_cpuclk_post_rate_change(
+		struct clk_notifier_data *ndata,
+		struct exynos_cpuclk *cpuclk)
+{
+	const struct exynos_cpuclk_regs * const regs = cpuclk->chip->regs;
+	void __iomem *base = cpuclk->base;
+	unsigned long flags;
+	u32 mux_reg;
+
+	/* Switch back to the reprogrammed CPU PLL. */
+	spin_lock_irqsave(cpuclk->lock, flags);
+
+	mux_reg = readl(base + regs->mux);
+	writel(mux_reg & ~E7870_CPU_MUX_SEL, base + regs->mux);
+
+	udelay(E7870_CPU_MUX_SETTLE_US);
+
+	spin_unlock_irqrestore(cpuclk->lock, flags);
+
+	return 0;
+}
+
 /* ---- Exynos850 ----------------------------------------------------------- */
 
 #define E850_DIV_RATIO_MASK	GENMASK(3, 0)
@@ -627,6 +688,11 @@ static const struct exynos_cpuclk_chip exynos_clkcpu_chips[] = {
 		.regs		= &e5433_cpuclk_regs,
 		.pre_rate_cb	= exynos5433_cpuclk_pre_rate_change,
 		.post_rate_cb	= exynos5433_cpuclk_post_rate_change,
+	},
+	[CPUCLK_LAYOUT_E7870] = {
+		.regs		= &e7870_cpuclk_regs,
+		.pre_rate_cb	= exynos7870_cpuclk_pre_rate_change,
+		.post_rate_cb	= exynos7870_cpuclk_post_rate_change,
 	},
 	[CPUCLK_LAYOUT_E850_CL0] = {
 		.regs		= &e850cl0_cpuclk_regs,

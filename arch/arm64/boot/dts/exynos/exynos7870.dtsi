@@ -182,6 +182,12 @@
 			clock-names = "oscclk", "switch";
 			clocks = <&oscclk>,
 				 <&cmu_mif CLK_GOUT_MIF_CMU_CPUCL1_SWITCH>;
+
+
+			assigned-clocks =
+				<&cmu_cpucl1 CLK_MOUT_CPUCL1_SWITCH_USER>;
+			assigned-clock-parents =
+				<&cmu_mif CLK_GOUT_MIF_CMU_CPUCL1_SWITCH>;
 		};
 
 		cmu_cpucl0: clock-controller@10900000 {
@@ -192,6 +198,12 @@
 			clock-names = "oscclk", "switch";
 			clocks = <&oscclk>,
 				 <&cmu_mif CLK_GOUT_MIF_CMU_CPUCL0_SWITCH>;
+
+
+			assigned-clocks =
+				<&cmu_cpucl0 CLK_MOUT_CPUCL0_SWITCH_USER>;
+			assigned-clock-parents =
+				<&cmu_mif CLK_GOUT_MIF_CMU_CPUCL0_SWITCH>;
 		};
 
 		pmu_system_controller: system-controller@10480000 {

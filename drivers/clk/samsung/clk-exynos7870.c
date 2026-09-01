@@ -780,9 +780,28 @@ static const unsigned long cpucl0_clk_regs[] __initconst = {
 	CLK_CON_DIV_CPUCL0_2,
 };
 
+
+/*
+ * Initial Exynos7870 CPU PLL rate table.
+ *
+ * 26 MHz input:
+ *
+ *  26 MHz * 347 / (5 * 2^1) = 902.2 MHz
+ *  26 MHz * 323 / (5 * 2^1) = 839.8 MHz
+ *
+ * Samsung CAL exposes these as the nominal 902 MHz and 839 MHz
+ * DVFS levels.
+ */
+static const struct samsung_pll_rate_table
+exynos7870_cpu_pll_rates[] __initconst = {
+	PLL_35XX_RATE(26000000, 902200000U, 347, 5, 1),
+	PLL_35XX_RATE(26000000, 839800000U, 323, 5, 1),
+	{ },
+};
+
 static const struct samsung_pll_clock cpucl0_pll_clks[] __initconst = {
 	PLL(pll_1417x, CLK_FOUT_CPUCL0_PLL, "fout_cpucl0_pll", "oscclk",
-	    PLL_LOCKTIME_CPUCL0_PLL, PLL_CON0_CPUCL0_PLL, NULL),
+	    PLL_LOCKTIME_CPUCL0_PLL, PLL_CON0_CPUCL0_PLL, exynos7870_cpu_pll_rates),
 };
 
 PNAME(mout_cpucl0_pll_p) = {
@@ -795,18 +814,28 @@ PNAME(mout_cpucl0_switch_user_p) = {
 	"gout_mif_cmu_cpucl0_switch",
 };
 
-PNAME(mout_cpucl0_p) = {
-	"gout_cpucl0_mux_pll",
-	"gout_cpucl0_mux_switch_user",
-};
 
 static const struct samsung_mux_clock cpucl0_mux_clks[] __initconst = {
 	MUX(CLK_MOUT_CPUCL0_PLL, "mout_cpucl0_pll",
 	    mout_cpucl0_pll_p, CLK_CON_MUX_CPUCL0_PLL, 12, 1),
 	MUX(CLK_MOUT_CPUCL0_SWITCH_USER, "mout_cpucl0_switch_user",
 	    mout_cpucl0_switch_user_p, CLK_CON_MUX_CPUCL0_SWITCH_USER, 12, 1),
-	MUX(CLK_MOUT_CPUCL0, "mout_cpucl0", mout_cpucl0_p,
-	    CLK_CON_MUX_CPUCL0, 12, 1),
+};
+
+
+static const struct exynos_cpuclk_cfg_data
+cpucl0_cpu_clk_d[] __initconst = {
+	{ 902200, 0, 0 },
+	{ 839800, 0, 0 },
+	{ 0 },
+};
+
+static const struct samsung_cpu_clock
+cpucl0_cpu_clks[] __initconst = {
+	CPU_CLK(CLK_MOUT_CPUCL0, "mout_cpucl0",
+		CLK_GOUT_CPUCL0_MUX_PLL,
+		CLK_GOUT_CPUCL0_MUX_SWITCH_USER,
+		0, 0, CPUCLK_LAYOUT_E7870, cpucl0_cpu_clk_d),
 };
 
 static const struct samsung_gate_clock cpucl0_gate_clks[] __initconst = {
@@ -837,6 +866,8 @@ static const struct samsung_cmu_info cpucl0_cmu_info __initconst = {
 	.nr_mux_clks		= ARRAY_SIZE(cpucl0_mux_clks),
 	.gate_clks		= cpucl0_gate_clks,
 	.nr_gate_clks		= ARRAY_SIZE(cpucl0_gate_clks),
+	.cpu_clks		= cpucl0_cpu_clks,
+	.nr_cpu_clks		= ARRAY_SIZE(cpucl0_cpu_clks),
 	.div_clks		= cpucl0_div_clks,
 	.nr_div_clks		= ARRAY_SIZE(cpucl0_div_clks),
 	.clk_regs		= cpucl0_clk_regs,
@@ -870,7 +901,7 @@ static const unsigned long cpucl1_clk_regs[] __initconst = {
 
 static const struct samsung_pll_clock cpucl1_pll_clks[] __initconst = {
 	PLL(pll_1417x, CLK_FOUT_CPUCL1_PLL, "fout_cpucl1_pll", "oscclk",
-	    PLL_LOCKTIME_CPUCL1_PLL, PLL_CON0_CPUCL1_PLL, NULL),
+	    PLL_LOCKTIME_CPUCL1_PLL, PLL_CON0_CPUCL1_PLL, exynos7870_cpu_pll_rates),
 };
 
 PNAME(mout_cpucl1_pll_p) = {
@@ -883,18 +914,28 @@ PNAME(mout_cpucl1_switch_user_p) = {
 	"gout_mif_cmu_cpucl1_switch",
 };
 
-PNAME(mout_cpucl1_p) = {
-	"gout_cpucl1_mux_pll",
-	"gout_cpucl1_mux_switch_user",
-};
 
 static const struct samsung_mux_clock cpucl1_mux_clks[] __initconst = {
 	MUX(CLK_MOUT_CPUCL1_PLL, "mout_cpucl1_pll",
 	    mout_cpucl1_pll_p, CLK_CON_MUX_CPUCL1_PLL, 12, 1),
 	MUX(CLK_MOUT_CPUCL1_SWITCH_USER, "mout_cpucl1_switch_user",
 	    mout_cpucl1_switch_user_p, CLK_CON_MUX_CPUCL1_SWITCH_USER, 12, 1),
-	MUX(CLK_MOUT_CPUCL1, "mout_cpucl1", mout_cpucl1_p,
-	    CLK_CON_MUX_CPUCL1, 12, 1),
+};
+
+
+static const struct exynos_cpuclk_cfg_data
+cpucl1_cpu_clk_d[] __initconst = {
+	{ 902200, 0, 0 },
+	{ 839800, 0, 0 },
+	{ 0 },
+};
+
+static const struct samsung_cpu_clock
+cpucl1_cpu_clks[] __initconst = {
+	CPU_CLK(CLK_MOUT_CPUCL1, "mout_cpucl1",
+		CLK_GOUT_CPUCL1_MUX_PLL,
+		CLK_GOUT_CPUCL1_MUX_SWITCH_USER,
+		0, 0, CPUCLK_LAYOUT_E7870, cpucl1_cpu_clk_d),
 };
 
 static const struct samsung_gate_clock cpucl1_gate_clks[] __initconst = {
@@ -925,6 +966,8 @@ static const struct samsung_cmu_info cpucl1_cmu_info __initconst = {
 	.nr_mux_clks		= ARRAY_SIZE(cpucl1_mux_clks),
 	.gate_clks		= cpucl1_gate_clks,
 	.nr_gate_clks		= ARRAY_SIZE(cpucl1_gate_clks),
+	.cpu_clks		= cpucl1_cpu_clks,
+	.nr_cpu_clks		= ARRAY_SIZE(cpucl1_cpu_clks),
 	.div_clks		= cpucl1_div_clks,
 	.nr_div_clks		= ARRAY_SIZE(cpucl1_div_clks),
 	.clk_regs		= cpucl1_clk_regs,
