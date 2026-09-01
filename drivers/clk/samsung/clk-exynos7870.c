@@ -86,6 +86,8 @@
 #define CLK_CON_DIV_MIF_BUSD				0x0420
 #define CLK_CON_DIV_MIF_APB				0x0424
 #define CLK_CON_DIV_MIF_HSI2C				0x0430
+#define CLK_CON_DIV_MIF_CMU_CPUCL0_SWITCH		0x0458
+#define CLK_CON_DIV_MIF_CMU_CPUCL1_SWITCH		0x045c
 #define CLK_CON_DIV_MIF_CMU_G3D_SWITCH			0x0460
 #define CLK_CON_DIV_MIF_CMU_ISP_VRA			0x0464
 #define CLK_CON_DIV_MIF_CMU_ISP_CAM			0x0468
@@ -124,6 +126,8 @@
 #define CLK_CON_GAT_MIF_CP_PCLK_HSI2C			0x0840
 #define CLK_CON_GAT_MIF_CP_PCLK_HSI2C_BAT_0		0x0840
 #define CLK_CON_GAT_MIF_CP_PCLK_HSI2C_BAT_1		0x0840
+#define CLK_CON_GAT_MIF_CMU_CPUCL0_SWITCH		0x0858
+#define CLK_CON_GAT_MIF_CMU_CPUCL1_SWITCH		0x085c
 #define CLK_CON_GAT_MIF_CMU_G3D_SWITCH			0x0860
 #define CLK_CON_GAT_MIF_CMU_ISP_VRA			0x0864
 #define CLK_CON_GAT_MIF_CMU_ISP_CAM			0x0868
@@ -219,6 +223,8 @@ static const unsigned long mif_clk_regs[] __initconst = {
 	CLK_CON_DIV_MIF_BUSD,
 	CLK_CON_DIV_MIF_APB,
 	CLK_CON_DIV_MIF_HSI2C,
+	CLK_CON_DIV_MIF_CMU_CPUCL0_SWITCH,
+	CLK_CON_DIV_MIF_CMU_CPUCL1_SWITCH,
 	CLK_CON_DIV_MIF_CMU_G3D_SWITCH,
 	CLK_CON_DIV_MIF_CMU_ISP_VRA,
 	CLK_CON_DIV_MIF_CMU_ISP_CAM,
@@ -257,6 +263,8 @@ static const unsigned long mif_clk_regs[] __initconst = {
 	CLK_CON_GAT_MIF_CP_PCLK_HSI2C,
 	CLK_CON_GAT_MIF_CP_PCLK_HSI2C_BAT_0,
 	CLK_CON_GAT_MIF_CP_PCLK_HSI2C_BAT_1,
+	CLK_CON_GAT_MIF_CMU_CPUCL0_SWITCH,
+	CLK_CON_GAT_MIF_CMU_CPUCL1_SWITCH,
 	CLK_CON_GAT_MIF_CMU_G3D_SWITCH,
 	CLK_CON_GAT_MIF_CMU_ISP_VRA,
 	CLK_CON_GAT_MIF_CMU_ISP_CAM,
@@ -447,6 +455,12 @@ static const struct samsung_div_clock mif_div_clks[] __initconst = {
 	    "dout_mif_cmu_fsys_usb20drd_refclk",
 	    "gout_mif_mux_cmu_fsys_usb20drd_refclk",
 	    CLK_CON_DIV_MIF_CMU_FSYS_USB20DRD_REFCLK, 0, 4),
+	DIV(CLK_DOUT_MIF_CMU_CPUCL0_SWITCH, "dout_mif_cmu_cpucl0_switch",
+	    "ffac_mif_mux_bus_pll_div2",
+	    CLK_CON_DIV_MIF_CMU_CPUCL0_SWITCH, 0, 2),
+	DIV(CLK_DOUT_MIF_CMU_CPUCL1_SWITCH, "dout_mif_cmu_cpucl1_switch",
+	    "ffac_mif_mux_bus_pll_div2",
+	    CLK_CON_DIV_MIF_CMU_CPUCL1_SWITCH, 0, 2),
 	DIV(CLK_DOUT_MIF_CMU_G3D_SWITCH, "dout_mif_cmu_g3d_switch",
 	    "ffac_mif_mux_bus_pll_div2", CLK_CON_DIV_MIF_CMU_G3D_SWITCH, 0, 2),
 	DIV(CLK_DOUT_MIF_CMU_ISP_CAM, "dout_mif_cmu_isp_cam",
@@ -525,6 +539,12 @@ static const struct samsung_gate_clock mif_gate_clks[] __initconst = {
 	     "dout_mif_cmu_fsys_usb20drd_refclk",
 	     CLK_CON_GAT_MIF_CMU_FSYS_USB20DRD_REFCLK, 0, CLK_SET_RATE_PARENT,
 	     0),
+	GATE(CLK_GOUT_MIF_CMU_CPUCL0_SWITCH, "gout_mif_cmu_cpucl0_switch",
+	     "dout_mif_cmu_cpucl0_switch", CLK_CON_GAT_MIF_CMU_CPUCL0_SWITCH,
+	     0, CLK_SET_RATE_PARENT, 0),
+	GATE(CLK_GOUT_MIF_CMU_CPUCL1_SWITCH, "gout_mif_cmu_cpucl1_switch",
+	     "dout_mif_cmu_cpucl1_switch", CLK_CON_GAT_MIF_CMU_CPUCL1_SWITCH,
+	     0, CLK_SET_RATE_PARENT, 0),
 	GATE(CLK_GOUT_MIF_CMU_G3D_SWITCH, "gout_mif_cmu_g3d_switch",
 	     "dout_mif_cmu_g3d_switch", CLK_CON_GAT_MIF_CMU_G3D_SWITCH, 0,
 	     CLK_SET_RATE_PARENT, 0),
@@ -733,6 +753,183 @@ static const struct samsung_cmu_info mif_cmu_info __initconst = {
 	.clk_regs		= mif_clk_regs,
 	.nr_clk_regs		= ARRAY_SIZE(mif_clk_regs),
 	.nr_clk_ids		= MIF_NR_CLK,
+};
+
+
+/*
+ * Register offsets for CMU_CPUCL0 (0x10900000)
+ */
+#define PLL_LOCKTIME_CPUCL0_PLL				0x0000
+#define PLL_CON0_CPUCL0_PLL				0x0100
+#define CLK_CON_MUX_CPUCL0_PLL				0x0200
+#define CLK_CON_GAT_CPUCL0_MUX_PLL			0x0200
+#define CLK_CON_MUX_CPUCL0_SWITCH_USER			0x0204
+#define CLK_CON_GAT_CPUCL0_MUX_SWITCH_USER		0x0204
+#define CLK_CON_MUX_CPUCL0				0x0208
+#define CLK_CON_GAT_CPUCL0_MUX				0x0208
+#define CLK_CON_DIV_CPUCL0_1				0x0400
+#define CLK_CON_DIV_CPUCL0_2				0x0404
+
+static const unsigned long cpucl0_clk_regs[] __initconst = {
+	PLL_LOCKTIME_CPUCL0_PLL,
+	PLL_CON0_CPUCL0_PLL,
+	CLK_CON_MUX_CPUCL0_PLL,
+	CLK_CON_MUX_CPUCL0_SWITCH_USER,
+	CLK_CON_MUX_CPUCL0,
+	CLK_CON_DIV_CPUCL0_1,
+	CLK_CON_DIV_CPUCL0_2,
+};
+
+static const struct samsung_pll_clock cpucl0_pll_clks[] __initconst = {
+	PLL(pll_1417x, CLK_FOUT_CPUCL0_PLL, "fout_cpucl0_pll", "oscclk",
+	    PLL_LOCKTIME_CPUCL0_PLL, PLL_CON0_CPUCL0_PLL, NULL),
+};
+
+PNAME(mout_cpucl0_pll_p) = {
+	"oscclk",
+	"fout_cpucl0_pll",
+};
+
+PNAME(mout_cpucl0_switch_user_p) = {
+	"oscclk",
+	"gout_mif_cmu_cpucl0_switch",
+};
+
+PNAME(mout_cpucl0_p) = {
+	"gout_cpucl0_mux_pll",
+	"gout_cpucl0_mux_switch_user",
+};
+
+static const struct samsung_mux_clock cpucl0_mux_clks[] __initconst = {
+	MUX(CLK_MOUT_CPUCL0_PLL, "mout_cpucl0_pll",
+	    mout_cpucl0_pll_p, CLK_CON_MUX_CPUCL0_PLL, 12, 1),
+	MUX(CLK_MOUT_CPUCL0_SWITCH_USER, "mout_cpucl0_switch_user",
+	    mout_cpucl0_switch_user_p, CLK_CON_MUX_CPUCL0_SWITCH_USER, 12, 1),
+	MUX(CLK_MOUT_CPUCL0, "mout_cpucl0", mout_cpucl0_p,
+	    CLK_CON_MUX_CPUCL0, 12, 1),
+};
+
+static const struct samsung_gate_clock cpucl0_gate_clks[] __initconst = {
+	GATE(CLK_GOUT_CPUCL0_MUX_PLL, "gout_cpucl0_mux_pll",
+	     "mout_cpucl0_pll", CLK_CON_GAT_CPUCL0_MUX_PLL, 21,
+	     CLK_SET_RATE_PARENT, 0),
+	GATE(CLK_GOUT_CPUCL0_MUX_SWITCH_USER,
+	     "gout_cpucl0_mux_switch_user",
+	     "mout_cpucl0_switch_user",
+	     CLK_CON_GAT_CPUCL0_MUX_SWITCH_USER, 21,
+	     CLK_SET_RATE_PARENT, 0),
+	GATE(CLK_GOUT_CPUCL0_MUX, "gout_cpucl0_mux",
+	     "mout_cpucl0", CLK_CON_GAT_CPUCL0_MUX, 21,
+	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),
+};
+
+static const struct samsung_div_clock cpucl0_div_clks[] __initconst = {
+	DIV(CLK_DOUT_CPUCL0_1, "dout_cpucl0_1", "gout_cpucl0_mux",
+	    CLK_CON_DIV_CPUCL0_1, 0, 3),
+	DIV(CLK_DOUT_CPUCL0_2, "dout_cpucl0_2", "dout_cpucl0_1",
+	    CLK_CON_DIV_CPUCL0_2, 0, 3),
+};
+
+static const struct samsung_cmu_info cpucl0_cmu_info __initconst = {
+	.pll_clks		= cpucl0_pll_clks,
+	.nr_pll_clks		= ARRAY_SIZE(cpucl0_pll_clks),
+	.mux_clks		= cpucl0_mux_clks,
+	.nr_mux_clks		= ARRAY_SIZE(cpucl0_mux_clks),
+	.gate_clks		= cpucl0_gate_clks,
+	.nr_gate_clks		= ARRAY_SIZE(cpucl0_gate_clks),
+	.div_clks		= cpucl0_div_clks,
+	.nr_div_clks		= ARRAY_SIZE(cpucl0_div_clks),
+	.clk_regs		= cpucl0_clk_regs,
+	.nr_clk_regs		= ARRAY_SIZE(cpucl0_clk_regs),
+	.nr_clk_ids		= CPUCL0_NR_CLK,
+};
+
+/*
+ * Register offsets for CMU_CPUCL1 (0x10800000)
+ */
+#define PLL_LOCKTIME_CPUCL1_PLL				0x0000
+#define PLL_CON0_CPUCL1_PLL				0x0100
+#define CLK_CON_MUX_CPUCL1_PLL				0x0200
+#define CLK_CON_GAT_CPUCL1_MUX_PLL			0x0200
+#define CLK_CON_MUX_CPUCL1_SWITCH_USER			0x0204
+#define CLK_CON_GAT_CPUCL1_MUX_SWITCH_USER		0x0204
+#define CLK_CON_MUX_CPUCL1				0x0208
+#define CLK_CON_GAT_CPUCL1_MUX				0x0208
+#define CLK_CON_DIV_CPUCL1_1				0x0400
+#define CLK_CON_DIV_CPUCL1_2				0x0404
+
+static const unsigned long cpucl1_clk_regs[] __initconst = {
+	PLL_LOCKTIME_CPUCL1_PLL,
+	PLL_CON0_CPUCL1_PLL,
+	CLK_CON_MUX_CPUCL1_PLL,
+	CLK_CON_MUX_CPUCL1_SWITCH_USER,
+	CLK_CON_MUX_CPUCL1,
+	CLK_CON_DIV_CPUCL1_1,
+	CLK_CON_DIV_CPUCL1_2,
+};
+
+static const struct samsung_pll_clock cpucl1_pll_clks[] __initconst = {
+	PLL(pll_1417x, CLK_FOUT_CPUCL1_PLL, "fout_cpucl1_pll", "oscclk",
+	    PLL_LOCKTIME_CPUCL1_PLL, PLL_CON0_CPUCL1_PLL, NULL),
+};
+
+PNAME(mout_cpucl1_pll_p) = {
+	"oscclk",
+	"fout_cpucl1_pll",
+};
+
+PNAME(mout_cpucl1_switch_user_p) = {
+	"oscclk",
+	"gout_mif_cmu_cpucl1_switch",
+};
+
+PNAME(mout_cpucl1_p) = {
+	"gout_cpucl1_mux_pll",
+	"gout_cpucl1_mux_switch_user",
+};
+
+static const struct samsung_mux_clock cpucl1_mux_clks[] __initconst = {
+	MUX(CLK_MOUT_CPUCL1_PLL, "mout_cpucl1_pll",
+	    mout_cpucl1_pll_p, CLK_CON_MUX_CPUCL1_PLL, 12, 1),
+	MUX(CLK_MOUT_CPUCL1_SWITCH_USER, "mout_cpucl1_switch_user",
+	    mout_cpucl1_switch_user_p, CLK_CON_MUX_CPUCL1_SWITCH_USER, 12, 1),
+	MUX(CLK_MOUT_CPUCL1, "mout_cpucl1", mout_cpucl1_p,
+	    CLK_CON_MUX_CPUCL1, 12, 1),
+};
+
+static const struct samsung_gate_clock cpucl1_gate_clks[] __initconst = {
+	GATE(CLK_GOUT_CPUCL1_MUX_PLL, "gout_cpucl1_mux_pll",
+	     "mout_cpucl1_pll", CLK_CON_GAT_CPUCL1_MUX_PLL, 21,
+	     CLK_SET_RATE_PARENT, 0),
+	GATE(CLK_GOUT_CPUCL1_MUX_SWITCH_USER,
+	     "gout_cpucl1_mux_switch_user",
+	     "mout_cpucl1_switch_user",
+	     CLK_CON_GAT_CPUCL1_MUX_SWITCH_USER, 21,
+	     CLK_SET_RATE_PARENT, 0),
+	GATE(CLK_GOUT_CPUCL1_MUX, "gout_cpucl1_mux",
+	     "mout_cpucl1", CLK_CON_GAT_CPUCL1_MUX, 21,
+	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),
+};
+
+static const struct samsung_div_clock cpucl1_div_clks[] __initconst = {
+	DIV(CLK_DOUT_CPUCL1_1, "dout_cpucl1_1", "gout_cpucl1_mux",
+	    CLK_CON_DIV_CPUCL1_1, 0, 3),
+	DIV(CLK_DOUT_CPUCL1_2, "dout_cpucl1_2", "dout_cpucl1_1",
+	    CLK_CON_DIV_CPUCL1_2, 0, 3),
+};
+
+static const struct samsung_cmu_info cpucl1_cmu_info __initconst = {
+	.pll_clks		= cpucl1_pll_clks,
+	.nr_pll_clks		= ARRAY_SIZE(cpucl1_pll_clks),
+	.mux_clks		= cpucl1_mux_clks,
+	.nr_mux_clks		= ARRAY_SIZE(cpucl1_mux_clks),
+	.gate_clks		= cpucl1_gate_clks,
+	.nr_gate_clks		= ARRAY_SIZE(cpucl1_gate_clks),
+	.div_clks		= cpucl1_div_clks,
+	.nr_div_clks		= ARRAY_SIZE(cpucl1_div_clks),
+	.clk_regs		= cpucl1_clk_regs,
+	.nr_clk_regs		= ARRAY_SIZE(cpucl1_clk_regs),
+	.nr_clk_ids		= CPUCL1_NR_CLK,
 };
 
 /*
@@ -1789,6 +1986,12 @@ static int __init exynos7870_cmu_probe(struct platform_device *pdev)
 
 static const struct of_device_id exynos7870_cmu_of_match[] = {
 	{
+		.compatible = "samsung,exynos7870-cmu-cpucl0",
+		.data = &cpucl0_cmu_info,
+	}, {
+		.compatible = "samsung,exynos7870-cmu-cpucl1",
+		.data = &cpucl1_cmu_info,
+	}, {
 		.compatible = "samsung,exynos7870-cmu-mif",
 		.data = &mif_cmu_info,
 	}, {

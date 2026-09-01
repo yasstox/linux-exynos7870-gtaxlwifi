@@ -173,6 +173,27 @@
 			clocks = <&oscclk>;
 		};
 
+
+		cmu_cpucl1: clock-controller@10800000 {
+			compatible = "samsung,exynos7870-cmu-cpucl1";
+			reg = <0x10800000 0x2000>;
+			#clock-cells = <1>;
+
+			clock-names = "oscclk", "switch";
+			clocks = <&oscclk>,
+				 <&cmu_mif CLK_GOUT_MIF_CMU_CPUCL1_SWITCH>;
+		};
+
+		cmu_cpucl0: clock-controller@10900000 {
+			compatible = "samsung,exynos7870-cmu-cpucl0";
+			reg = <0x10900000 0x2000>;
+			#clock-cells = <1>;
+
+			clock-names = "oscclk", "switch";
+			clocks = <&oscclk>,
+				 <&cmu_mif CLK_GOUT_MIF_CMU_CPUCL0_SWITCH>;
+		};
+
 		pmu_system_controller: system-controller@10480000 {
 			compatible = "samsung,exynos7870-pmu",
 				     "samsung,exynos7-pmu", "syscon";
