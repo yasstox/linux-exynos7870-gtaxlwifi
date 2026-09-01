@@ -7,8 +7,10 @@
  */
 
 #include <linux/delay.h>
+#include <linux/backlight.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
+#include <linux/mutex.h>
 #include <linux/of.h>
 
 #include <linux/gpio/consumer.h>
@@ -47,14 +49,61 @@ struct panel_info {
 	struct gpio_desc *enable_gpio;
 	struct gpio_desc *pp33_gpio;
 	struct gpio_desc *pp18_gpio;
+	struct backlight_device *backlight;
+	struct mutex backlight_lock;
+	u8 brightness;
 
 	bool bootloader_handoff;
 };
+
+#define GTAXLWIFI_MAX_BRIGHTNESS	255
+#define GTAXLWIFI_MAX_DUTY		199
 
 static inline struct panel_info *to_panel_info(struct drm_panel *panel)
 {
 	return container_of(panel, struct panel_info, base);
 }
+
+static int gtaxlwifi_backlight_update_status(struct backlight_device *backlight)
+{
+	struct panel_info *pinfo = bl_get_data(backlight);
+	u8 page[] = { 0xb0, 0x04 };
+	u8 duty[] = { 0xb8, 0x00 };
+	unsigned int brightness = backlight_get_brightness(backlight);
+	int ret;
+
+	duty[1] = brightness * GTAXLWIFI_MAX_DUTY /
+		  GTAXLWIFI_MAX_BRIGHTNESS;
+
+	mutex_lock(&pinfo->backlight_lock);
+	ret = mipi_dsi_dcs_write_buffer(pinfo->link, page, sizeof(page));
+	if (ret < 0)
+		goto out;
+
+	ret = mipi_dsi_dcs_write_buffer(pinfo->link, duty, sizeof(duty));
+	if (ret >= 0) {
+		pinfo->brightness = brightness;
+		ret = 0;
+	}
+
+out:
+	mutex_unlock(&pinfo->backlight_lock);
+	return ret;
+}
+
+static int gtaxlwifi_backlight_get_brightness(
+		struct backlight_device *backlight)
+{
+	struct panel_info *pinfo = bl_get_data(backlight);
+
+	return pinfo->brightness;
+}
+
+static const struct backlight_ops gtaxlwifi_backlight_ops = {
+	.options = BL_CORE_SUSPENDRESUME,
+	.update_status = gtaxlwifi_backlight_update_status,
+	.get_brightness = gtaxlwifi_backlight_get_brightness,
+};
 
 static void disable_gpios(struct panel_info *pinfo)
 {
@@ -851,13 +900,18 @@ MODULE_DEVICE_TABLE(of, panel_of_match);
 static int panel_add(struct panel_info *pinfo)
 {
 	struct device *dev = &pinfo->link->dev;
+	struct backlight_properties props = {
+		.type = BACKLIGHT_RAW,
+		.max_brightness = GTAXLWIFI_MAX_BRIGHTNESS,
+		.brightness = GTAXLWIFI_MAX_BRIGHTNESS,
+	};
 	int ret;
 
 	pinfo->bootloader_handoff =
 		device_property_read_bool(dev, "samsung,bootloader-handoff");
 
 	if (pinfo->bootloader_handoff)
-		goto add_panel;
+		goto add_backlight;
 
 	pinfo->pp18_gpio = devm_gpiod_get(dev, "pp18", GPIOD_OUT_HIGH);
 	if (IS_ERR(pinfo->pp18_gpio)) {
@@ -877,11 +931,29 @@ static int panel_add(struct panel_info *pinfo)
 				     "failed to get enable gpio\n");
 	}
 
+add_backlight:
+	if (!device_is_compatible(dev, "samsung,gtaxlwifi-himax8279d"))
+		goto add_panel;
+
+	mutex_init(&pinfo->backlight_lock);
+	pinfo->brightness = GTAXLWIFI_MAX_BRIGHTNESS;
+	pinfo->backlight = devm_backlight_device_register(dev, "panel", dev,
+							 pinfo,
+							 &gtaxlwifi_backlight_ops,
+							 &props);
+	if (IS_ERR(pinfo->backlight))
+		return dev_err_probe(dev, PTR_ERR(pinfo->backlight),
+				     "failed to register backlight\n");
+
+	pinfo->base.backlight = pinfo->backlight;
+	goto register_panel;
+
 add_panel:
 	ret = drm_panel_of_backlight(&pinfo->base);
 	if (ret)
 		return ret;
 
+register_panel:
 	drm_panel_add(&pinfo->base);
 
 	return 0;
