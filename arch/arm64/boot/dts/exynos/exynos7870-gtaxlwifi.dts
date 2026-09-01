@@ -414,7 +414,7 @@
 	};
 };
 
-&i2c4 {
+&i2c0 {
 	#address-cells = <1>;
 	#size-cells = <0>;
 	status = "okay";
@@ -422,9 +422,9 @@
 	samsung,i2c-max-bus-freq = <400000>;
 	samsung,i2c-sda-delay = <100>;
 
-	fuelgauge@3b {
-		compatible = "samsung,s2mu005-fuel-gauge";
-		reg = <0x3b>;
+	fuelgauge@71 {
+		compatible = "samsung,sm5703-fuelgauge";
+		reg = <0x71>;
 		interrupt-parent = <&gpa0>;
 		interrupts = <3 IRQ_TYPE_EDGE_FALLING>;
 
