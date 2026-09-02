@@ -151,6 +151,7 @@
 };
 
 &gpu {
+	mali-supply = <&vdd_buck3>;
 	status = "okay";
 };
 
