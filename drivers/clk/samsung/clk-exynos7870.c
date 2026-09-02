@@ -794,6 +794,7 @@ static const unsigned long cpucl0_clk_regs[] __initconst = {
  */
 static const struct samsung_pll_rate_table
 exynos7870_cpu_pll_rates[] __initconst = {
+	PLL_35XX_RATE(26000000, 1014000000U, 195, 5, 0),
 	PLL_35XX_RATE(26000000, 902200000U, 347, 5, 1),
 	PLL_35XX_RATE(26000000, 839800000U, 323, 5, 1),
 	{ },
@@ -816,8 +817,9 @@ PNAME(mout_cpucl0_switch_user_p) = {
 
 
 static const struct samsung_mux_clock cpucl0_mux_clks[] __initconst = {
-	MUX(CLK_MOUT_CPUCL0_PLL, "mout_cpucl0_pll",
-	    mout_cpucl0_pll_p, CLK_CON_MUX_CPUCL0_PLL, 12, 1),
+	MUX_F(CLK_MOUT_CPUCL0_PLL, "mout_cpucl0_pll",
+	      mout_cpucl0_pll_p, CLK_CON_MUX_CPUCL0_PLL, 12, 1,
+	      CLK_SET_RATE_PARENT | CLK_RECALC_NEW_RATES, 0),
 	MUX(CLK_MOUT_CPUCL0_SWITCH_USER, "mout_cpucl0_switch_user",
 	    mout_cpucl0_switch_user_p, CLK_CON_MUX_CPUCL0_SWITCH_USER, 12, 1),
 };
@@ -825,6 +827,7 @@ static const struct samsung_mux_clock cpucl0_mux_clks[] __initconst = {
 
 static const struct exynos_cpuclk_cfg_data
 cpucl0_cpu_clk_d[] __initconst = {
+	{ 1014000, 0, 0 },
 	{ 902200, 0, 0 },
 	{ 839800, 0, 0 },
 	{ 0 },
@@ -846,7 +849,7 @@ static const struct samsung_gate_clock cpucl0_gate_clks[] __initconst = {
 	     "gout_cpucl0_mux_switch_user",
 	     "mout_cpucl0_switch_user",
 	     CLK_CON_GAT_CPUCL0_MUX_SWITCH_USER, 21,
-	     CLK_SET_RATE_PARENT, 0),
+	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),
 	GATE(CLK_GOUT_CPUCL0_MUX, "gout_cpucl0_mux",
 	     "mout_cpucl0", CLK_CON_GAT_CPUCL0_MUX, 21,
 	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),
@@ -916,8 +919,9 @@ PNAME(mout_cpucl1_switch_user_p) = {
 
 
 static const struct samsung_mux_clock cpucl1_mux_clks[] __initconst = {
-	MUX(CLK_MOUT_CPUCL1_PLL, "mout_cpucl1_pll",
-	    mout_cpucl1_pll_p, CLK_CON_MUX_CPUCL1_PLL, 12, 1),
+	MUX_F(CLK_MOUT_CPUCL1_PLL, "mout_cpucl1_pll",
+	      mout_cpucl1_pll_p, CLK_CON_MUX_CPUCL1_PLL, 12, 1,
+	      CLK_SET_RATE_PARENT | CLK_RECALC_NEW_RATES, 0),
 	MUX(CLK_MOUT_CPUCL1_SWITCH_USER, "mout_cpucl1_switch_user",
 	    mout_cpucl1_switch_user_p, CLK_CON_MUX_CPUCL1_SWITCH_USER, 12, 1),
 };
@@ -925,6 +929,7 @@ static const struct samsung_mux_clock cpucl1_mux_clks[] __initconst = {
 
 static const struct exynos_cpuclk_cfg_data
 cpucl1_cpu_clk_d[] __initconst = {
+	{ 1014000, 0, 0 },
 	{ 902200, 0, 0 },
 	{ 839800, 0, 0 },
 	{ 0 },
@@ -946,7 +951,7 @@ static const struct samsung_gate_clock cpucl1_gate_clks[] __initconst = {
 	     "gout_cpucl1_mux_switch_user",
 	     "mout_cpucl1_switch_user",
 	     CLK_CON_GAT_CPUCL1_MUX_SWITCH_USER, 21,
-	     CLK_SET_RATE_PARENT, 0),
+	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),
 	GATE(CLK_GOUT_CPUCL1_MUX, "gout_cpucl1_mux",
 	     "mout_cpucl1", CLK_CON_GAT_CPUCL1_MUX, 21,
 	     CLK_IS_CRITICAL | CLK_SET_RATE_PARENT, 0),

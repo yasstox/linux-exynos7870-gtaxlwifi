@@ -407,8 +407,6 @@ static int exynos5433_cpuclk_post_rate_change(struct clk_notifier_data *ndata,
 /* ---- Exynos7870 ---------------------------------------------------------- */
 
 #define E7870_CPU_MUX_SEL		BIT(12)
-#define E7870_CPU_MUX_SETTLE_US		10
-
 static const struct exynos_cpuclk_regs e7870_cpuclk_regs = {
 	.mux = 0x0208,
 };
@@ -434,8 +432,7 @@ static int exynos7870_cpuclk_pre_rate_change(
 
 	mux_reg = readl(base + regs->mux);
 	writel(mux_reg | E7870_CPU_MUX_SEL, base + regs->mux);
-
-	udelay(E7870_CPU_MUX_SETTLE_US);
+	wait_until_mux_stable(base + regs->mux, 16, 1, 0);
 
 	spin_unlock_irqrestore(cpuclk->lock, flags);
 
@@ -456,8 +453,7 @@ static int exynos7870_cpuclk_post_rate_change(
 
 	mux_reg = readl(base + regs->mux);
 	writel(mux_reg & ~E7870_CPU_MUX_SEL, base + regs->mux);
-
-	udelay(E7870_CPU_MUX_SETTLE_US);
+	wait_until_mux_stable(base + regs->mux, 16, 1, 0);
 
 	spin_unlock_irqrestore(cpuclk->lock, flags);
 

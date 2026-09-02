@@ -680,15 +680,20 @@
 		compatible = "operating-points-v2";
 		opp-shared;
 
-		opp-902200000 {
-			opp-hz = /bits/ 64 <902200000>;
-			opp-microvolt = <737500>;
+		opp-1014000000 {
+			opp-hz = /bits/ 64 <1014000000>;
+			opp-microvolt = <900000 900000 1300000>;
 		};
 
-		/* First dynamic-clock test: intentionally keep 902 MHz voltage. */
+		opp-902200000 {
+			opp-hz = /bits/ 64 <902200000>;
+			opp-microvolt = <737500 737500 1300000>;
+		};
+
+		/* Voltage measured from the tablet's original DT/PMIC setup. */
 		opp-839800000 {
 			opp-hz = /bits/ 64 <839800000>;
-			opp-microvolt = <737500>;
+			opp-microvolt = <737500 737500 1300000>;
 		};
 	};
 
@@ -696,15 +701,20 @@
 		compatible = "operating-points-v2";
 		opp-shared;
 
-		opp-902200000 {
-			opp-hz = /bits/ 64 <902200000>;
-			opp-microvolt = <737500>;
+		opp-1014000000 {
+			opp-hz = /bits/ 64 <1014000000>;
+			opp-microvolt = <900000 900000 1300000>;
 		};
 
-		/* First dynamic-clock test: intentionally keep 902 MHz voltage. */
+		opp-902200000 {
+			opp-hz = /bits/ 64 <902200000>;
+			opp-microvolt = <737500 737500 1300000>;
+		};
+
+		/* Voltage measured from the tablet's original DT/PMIC setup. */
 		opp-839800000 {
 			opp-hz = /bits/ 64 <839800000>;
-			opp-microvolt = <737500>;
+			opp-microvolt = <737500 737500 1300000>;
 		};
 	};
 };
