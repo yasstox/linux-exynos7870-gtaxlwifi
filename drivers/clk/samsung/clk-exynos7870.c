@@ -794,6 +794,11 @@ static const unsigned long cpucl0_clk_regs[] __initconst = {
  */
 static const struct samsung_pll_rate_table
 exynos7870_cpu_pll_rates[] __initconst = {
+	PLL_35XX_RATE(26000000, 1586000000U, 183, 3, 0),
+	PLL_35XX_RATE(26000000, 1482000000U, 171, 3, 0),
+	PLL_35XX_RATE(26000000, 1352000000U, 156, 3, 0),
+	PLL_35XX_RATE(26000000, 1248000000U, 144, 3, 0),
+	PLL_35XX_RATE(26000000, 1144000000U, 264, 3, 1),
 	PLL_35XX_RATE(26000000, 1014000000U, 195, 5, 0),
 	PLL_35XX_RATE(26000000, 902200000U, 347, 5, 1),
 	PLL_35XX_RATE(26000000, 839800000U, 323, 5, 1),
@@ -827,6 +832,11 @@ static const struct samsung_mux_clock cpucl0_mux_clks[] __initconst = {
 
 static const struct exynos_cpuclk_cfg_data
 cpucl0_cpu_clk_d[] __initconst = {
+	{ 1586000, 0, 0 },
+	{ 1482000, 0, 0 },
+	{ 1352000, 0, 0 },
+	{ 1248000, 0, 0 },
+	{ 1144000, 0, 0 },
 	{ 1014000, 0, 0 },
 	{ 902200, 0, 0 },
 	{ 839800, 0, 0 },
@@ -929,6 +939,11 @@ static const struct samsung_mux_clock cpucl1_mux_clks[] __initconst = {
 
 static const struct exynos_cpuclk_cfg_data
 cpucl1_cpu_clk_d[] __initconst = {
+	{ 1586000, 0, 0 },
+	{ 1482000, 0, 0 },
+	{ 1352000, 0, 0 },
+	{ 1248000, 0, 0 },
+	{ 1144000, 0, 0 },
 	{ 1014000, 0, 0 },
 	{ 902200, 0, 0 },
 	{ 839800, 0, 0 },
@@ -1422,9 +1437,15 @@ static const unsigned long g3d_clk_regs[] __initconst = {
 	CLK_CON_GAT_G3D_SYSREG_PCLK,
 };
 
+static const struct samsung_pll_rate_table
+exynos7870_g3d_pll_rates[] __initconst = {
+	PLL_35XX_RATE(26000000, 1001000000U, 231, 3, 1),
+	{ },
+};
+
 static const struct samsung_pll_clock g3d_pll_clks[] __initconst = {
 	PLL(pll_1417x, CLK_FOUT_G3D_PLL, "fout_g3d_pll", "oscclk",
-	    PLL_LOCKTIME_G3D_PLL, PLL_CON0_G3D_PLL, NULL),
+	    PLL_LOCKTIME_G3D_PLL, PLL_CON0_G3D_PLL, exynos7870_g3d_pll_rates),
 };
 
 /* List of parent clocks for muxes in CMU_G3D */

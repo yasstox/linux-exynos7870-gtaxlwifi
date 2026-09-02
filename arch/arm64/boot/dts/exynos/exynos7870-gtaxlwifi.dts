@@ -152,7 +152,13 @@
 
 &gpu {
 	mali-supply = <&vdd_buck3>;
+	operating-points-v2 = <&gpu_opp_table>;
 	status = "okay";
+};
+
+&cmu_g3d {
+	assigned-clocks = <&cmu_g3d CLK_FOUT_G3D_PLL>;
+	assigned-clock-rates = <1001000000>;
 };
 
 &hsi2c0 {
@@ -680,6 +686,31 @@
 		compatible = "operating-points-v2";
 		opp-shared;
 
+		opp-1586000000 {
+			opp-hz = /bits/ 64 <1586000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1482000000 {
+			opp-hz = /bits/ 64 <1482000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1352000000 {
+			opp-hz = /bits/ 64 <1352000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1248000000 {
+			opp-hz = /bits/ 64 <1248000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1144000000 {
+			opp-hz = /bits/ 64 <1144000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
 		opp-1014000000 {
 			opp-hz = /bits/ 64 <1014000000>;
 			opp-microvolt = <900000 900000 1300000>;
@@ -701,6 +732,31 @@
 		compatible = "operating-points-v2";
 		opp-shared;
 
+		opp-1586000000 {
+			opp-hz = /bits/ 64 <1586000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1482000000 {
+			opp-hz = /bits/ 64 <1482000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1352000000 {
+			opp-hz = /bits/ 64 <1352000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1248000000 {
+			opp-hz = /bits/ 64 <1248000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
+		opp-1144000000 {
+			opp-hz = /bits/ 64 <1144000000>;
+			opp-microvolt = <900000 900000 1300000>;
+		};
+
 		opp-1014000000 {
 			opp-hz = /bits/ 64 <1014000000>;
 			opp-microvolt = <900000 900000 1300000>;
@@ -715,6 +771,15 @@
 		opp-839800000 {
 			opp-hz = /bits/ 64 <839800000>;
 			opp-microvolt = <737500 737500 1300000>;
+		};
+	};
+
+	gpu_opp_table: opp-table-gpu {
+		compatible = "operating-points-v2";
+
+		opp-1001000000 {
+			opp-hz = /bits/ 64 <1001000000>;
+			opp-microvolt = <900000>;
 		};
 	};
 };
