@@ -151,6 +151,7 @@
 };
 
 &gpu {
+	#cooling-cells = <2>;
 	mali-supply = <&vdd_buck3>;
 	operating-points-v2 = <&gpu_opp_table>;
 	status = "okay";
@@ -158,7 +159,7 @@
 
 &cmu_g3d {
 	assigned-clocks = <&cmu_g3d CLK_FOUT_G3D_PLL>;
-	assigned-clock-rates = <1001000000>;
+	assigned-clock-rates = <343200000>;
 };
 
 &hsi2c0 {
@@ -418,6 +419,30 @@
 		touchscreen-size-y = <1920>;
 		touch-key-connected;
 		st,legacy-protocol;
+	};
+};
+
+&i2c2 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+
+	muic@25 {
+		compatible = "siliconmitus,sm5703-muic";
+		reg = <0x25>;
+		interrupt-parent = <&gpa2>;
+		interrupts = <6 IRQ_TYPE_EDGE_FALLING>;
+	};
+};
+
+&i2c4 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	charger@49 {
+		compatible = "siliconmitus,sm5703-charger";
+		reg = <0x49>;
+		enable-gpios = <&gpd1 3 GPIO_ACTIVE_LOW>;
 	};
 };
 
@@ -779,6 +804,36 @@
 
 		opp-1001000000 {
 			opp-hz = /bits/ 64 <1001000000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-845000000 {
+			opp-hz = /bits/ 64 <845000000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-728000000 {
+			opp-hz = /bits/ 64 <728000000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-676000000 {
+			opp-hz = /bits/ 64 <676000000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-546000000 {
+			opp-hz = /bits/ 64 <546000000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-449800000 {
+			opp-hz = /bits/ 64 <449800000>;
+			opp-microvolt = <900000>;
+		};
+
+		opp-343200000 {
+			opp-hz = /bits/ 64 <343200000>;
 			opp-microvolt = <900000>;
 		};
 	};

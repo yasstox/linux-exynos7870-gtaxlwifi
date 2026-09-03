@@ -1440,6 +1440,12 @@ static const unsigned long g3d_clk_regs[] __initconst = {
 static const struct samsung_pll_rate_table
 exynos7870_g3d_pll_rates[] __initconst = {
 	PLL_35XX_RATE(26000000, 1001000000U, 231, 3, 1),
+	PLL_35XX_RATE(26000000, 845000000U, 195, 3, 1),
+	PLL_35XX_RATE(26000000, 728000000U, 168, 3, 1),
+	PLL_35XX_RATE(26000000, 676000000U, 156, 3, 1),
+	PLL_35XX_RATE(26000000, 546000000U, 126, 3, 1),
+	PLL_35XX_RATE(26000000, 449800000U, 173, 5, 1),
+	PLL_35XX_RATE(26000000, 343200000U, 132, 5, 1),
 	{ },
 };
 

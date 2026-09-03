@@ -305,6 +305,11 @@ config CHARGER_SBS
 	help
 	  Say Y to include support for SBS compliant battery chargers.
 
+config CHARGER_SM5703
+	tristate "Silicon Mitus SM5703 charger"
+	depends on I2C
+	select REGMAP_I2C
+
 config MANAGER_SBS
 	tristate "Smart Battery System Manager"
 	depends on I2C && I2C_MUX && GPIOLIB
