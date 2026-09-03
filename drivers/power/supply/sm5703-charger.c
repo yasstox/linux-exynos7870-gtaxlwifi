@@ -2,6 +2,7 @@
 /* Conservative charger support for the Silicon Mitus SM5703. */
 
 #include <linux/bitfield.h>
+#include <linux/extcon.h>
 #include <linux/gpio/consumer.h>
 #include <linux/i2c.h>
 #include <linux/power_supply.h>
@@ -26,6 +27,7 @@
 #define SM5703_AICLEN			BIT(7)
 
 #define SM5703_USB_CURRENT_UA		450000
+#define SM5703_DCP_CURRENT_UA		1650000
 #define SM5703_FLOAT_VOLTAGE_UV		4300000
 #define SM5703_POLL_INTERVAL_MS		5000
 
@@ -36,10 +38,12 @@
 
 struct sm5703_charger {
 	struct regmap *regmap;
+	struct extcon_dev *extcon;
 	struct gpio_desc *enable_gpio;
 	struct power_supply *psy;
 	struct delayed_work work;
 	bool online;
+	int current_ua;
 };
 
 static const enum power_supply_property sm5703_charger_properties[] = {
@@ -80,7 +84,7 @@ static int sm5703_charger_get_property(struct power_supply *psy,
 		return 0;
 	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
-		val->intval = SM5703_USB_CURRENT_UA;
+		val->intval = charger->current_ua;
 		return 0;
 	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE:
 		val->intval = SM5703_FLOAT_VOLTAGE_UV;
@@ -90,11 +94,40 @@ static int sm5703_charger_get_property(struct power_supply *psy,
 	}
 }
 
+static int sm5703_current_to_reg(int current_ua)
+{
+	return (current_ua / 1000 - 100) / 50;
+}
+
+static int sm5703_charger_set_current(struct sm5703_charger *charger,
+				      int current_ua)
+{
+	int value = sm5703_current_to_reg(current_ua);
+	int ret;
+
+	if (current_ua == charger->current_ua)
+		return 0;
+
+	ret = regmap_write(charger->regmap, SM5703_REG_VBUSCNTL, value);
+	if (ret)
+		return ret;
+
+	ret = regmap_write(charger->regmap, SM5703_REG_CHGCNTL2, value);
+	if (ret)
+		return ret;
+
+	charger->current_ua = current_ua;
+	dev_info(regmap_get_device(charger->regmap),
+		 "charge current set to %d mA\n", current_ua / 1000);
+	return 0;
+}
+
 static void sm5703_charger_update(struct work_struct *work)
 {
 	struct sm5703_charger *charger;
 	unsigned int status;
 	bool online;
+	int current_ua;
 	int ret;
 
 	charger = container_of(to_delayed_work(work),
@@ -104,6 +137,14 @@ static void sm5703_charger_update(struct work_struct *work)
 		goto reschedule;
 
 	online = status & SM5703_STATUS5_VBUSOK;
+	current_ua = SM5703_USB_CURRENT_UA;
+	if (charger->extcon &&
+	    extcon_get_state(charger->extcon, EXTCON_CHG_USB_DCP) > 0)
+		current_ua = SM5703_DCP_CURRENT_UA;
+
+	if (online)
+		sm5703_charger_set_current(charger, current_ua);
+
 	if (online == charger->online)
 		goto reschedule;
 
@@ -178,16 +219,22 @@ static int sm5703_charger_probe(struct i2c_client *client)
 	if (!charger)
 		return -ENOMEM;
 
-	charger->regmap = devm_regmap_init_i2c(
-		client, &sm5703_charger_regmap_config);
+	charger->regmap = devm_regmap_init_i2c(client,
+						 &sm5703_charger_regmap_config);
 	if (IS_ERR(charger->regmap))
 		return PTR_ERR(charger->regmap);
+
+	charger->extcon = extcon_get_edev_by_phandle(dev, 0);
+	if (IS_ERR(charger->extcon))
+		return dev_err_probe(dev, PTR_ERR(charger->extcon),
+				     "failed to get MUIC extcon\n");
 
 	charger->enable_gpio = devm_gpiod_get(dev, "enable", GPIOD_OUT_LOW);
 	if (IS_ERR(charger->enable_gpio))
 		return dev_err_probe(dev, PTR_ERR(charger->enable_gpio),
 				     "failed to get enable GPIO\n");
 
+	charger->current_ua = SM5703_USB_CURRENT_UA;
 	ret = sm5703_charger_configure(charger);
 	if (ret)
 		return dev_err_probe(dev, ret, "failed to configure charger\n");

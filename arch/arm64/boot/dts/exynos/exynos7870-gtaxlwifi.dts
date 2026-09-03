@@ -427,7 +427,7 @@
 	#size-cells = <0>;
 	status = "okay";
 
-	muic@25 {
+	muic: muic@25 {
 		compatible = "siliconmitus,sm5703-muic";
 		reg = <0x25>;
 		interrupt-parent = <&gpa2>;
@@ -443,6 +443,7 @@
 		compatible = "siliconmitus,sm5703-charger";
 		reg = <0x49>;
 		enable-gpios = <&gpd1 3 GPIO_ACTIVE_LOW>;
+		extcon = <&muic>;
 	};
 };
 
