@@ -1462,14 +1462,15 @@ PNAME(mout_g3d_p)		= { "gout_g3d_mux_pll_con",
 static const struct samsung_mux_clock g3d_mux_clks[] __initconst = {
 	MUX(CLK_MOUT_G3D_SWITCH_USER, "mout_g3d_switch_user",
 	    mout_g3d_switch_user_p, CLK_CON_MUX_G3D_SWITCH_USER, 12, 1),
-	MUX(CLK_MOUT_G3D, "mout_g3d", mout_g3d_p, CLK_CON_MUX_G3D, 12, 1),
+	MUX_F(CLK_MOUT_G3D, "mout_g3d", mout_g3d_p, CLK_CON_MUX_G3D, 12, 1,
+	      CLK_SET_RATE_PARENT, 0),
 };
 
 static const struct samsung_div_clock g3d_div_clks[] __initconst = {
 	DIV(CLK_DOUT_G3D_APB, "dout_g3d_apb", "dout_g3d_bus",
 	    CLK_CON_DIV_G3D_APB, 0, 3),
-	DIV(CLK_DOUT_G3D_BUS, "dout_g3d_bus", "gout_g3d_mux",
-	    CLK_CON_DIV_G3D_BUS, 0, 3),
+	DIV_F(CLK_DOUT_G3D_BUS, "dout_g3d_bus", "gout_g3d_mux",
+	      CLK_CON_DIV_G3D_BUS, 0, 3, CLK_SET_RATE_PARENT, 0),
 };
 
 static const struct samsung_gate_clock g3d_gate_clks[] __initconst = {

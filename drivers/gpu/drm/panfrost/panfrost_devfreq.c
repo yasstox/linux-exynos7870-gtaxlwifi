@@ -41,8 +41,11 @@ static int panfrost_devfreq_target(struct device *dev, unsigned long *freq,
 	dev_pm_opp_put(opp);
 
 	err = dev_pm_opp_set_rate(dev, *freq);
-	if (!err)
+	if (!err) {
+		/* Report the rate reached by the clock tree, not the OPP request. */
+		*freq = clk_get_rate(pfdev->clock);
 		pfdev->pfdevfreq.current_frequency = *freq;
+	}
 
 	return err;
 }
